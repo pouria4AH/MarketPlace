@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MarketPlace.Application.Services.Implementations;
+using MarketPlace.Application.Services.interfaces;
+using MarketPlace.DataLayer.Repository;
 
 namespace MarketPlace.Web
 {
@@ -24,6 +27,8 @@ namespace MarketPlace.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
