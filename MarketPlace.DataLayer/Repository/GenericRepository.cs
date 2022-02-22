@@ -12,7 +12,7 @@ namespace MarketPlace.DataLayer.Repository
         private readonly MarketPlaceDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
 
-        public GenericRepository(MarketPlaceDbContext context, DbSet<TEntity> dbSet)
+        public GenericRepository(MarketPlaceDbContext context)
         {
             _context = context;
             this._dbSet = _context.Set<TEntity>();

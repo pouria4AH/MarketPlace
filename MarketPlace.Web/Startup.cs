@@ -10,7 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.Implementations;
 using MarketPlace.Application.Services.interfaces;
+using MarketPlace.DataLayer.Context;
 using MarketPlace.DataLayer.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Web
 {
@@ -29,6 +31,16 @@ namespace MarketPlace.Web
             services.AddControllersWithViews();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
+
+            #region config database
+
+            services.AddDbContext<MarketPlaceDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("MarketPlaceConnection"));
+            });
+
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
