@@ -31,6 +31,7 @@ namespace MarketPlace.Web
             services.AddControllersWithViews();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordHelper, PasswordHelper>();
 
             #region config database
 
