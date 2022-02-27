@@ -27,7 +27,7 @@ namespace MarketPlace.DataLayer.DTOs
         [Display(Name = "کلمه عبور")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        [Compare("password", ErrorMessage = "پسورد یکی نیست ")]
+        [Compare("Password", ErrorMessage = "پسورد یکی نیست ")]
         public string ConfirmPassword { get; set; }
     }
 

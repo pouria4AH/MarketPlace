@@ -40,10 +40,15 @@ namespace MarketPlace.Web.Controllers
                         TempData[ErrorMessage] = "تلفن همراه وارد شده تکراری می باشد";
                         ModelState.AddModelError("Mobile", "تلفن همراه وارد شده تکراری می باشد");
                         break;
-                    case RegisterUserResult.Error:
-                        TempData[ErrorMessage] = "مشکلی پیش امده است";
-                        ModelState.AddModelError("Mobile", "مشکلی پیش امده است");
-                        break;
+
+                        #region coment
+
+                        //case RegisterUserResult.Error:
+                    //    TempData[ErrorMessage] = "مشکلی پیش امده است";
+                    //    ModelState.AddModelError("Mobile", "مشکلی پیش امده است");
+                    //    break;
+
+                    #endregion  
                     case RegisterUserResult.Success:
                         TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
                         TempData[InfoMessage] = "کد تایید تلفن همراه برای شما ارسال شد";
@@ -58,7 +63,13 @@ namespace MarketPlace.Web.Controllers
 
         #region Login
 
-        public IActionResult Login()
+        //[HttpGet("login")]
+
+        //public IActionResult Login()
+        //{
+        //    return View();
+        //}
+        public async Task<IActionResult> Login()
         {
             return View();
         }

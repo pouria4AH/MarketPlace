@@ -1,9 +1,9 @@
 ﻿@if (
-  TempData["ErrorMessage"] != null ||
-  TempData["InfoMessage"] != null ||
-  TempData["SuccessMessage"] != null ||
-  TempData["WarningMessage"] != null
-  )
+TempData["ErrorMessage"] != null ||
+TempData["InfoMessage"] != null ||
+TempData["SuccessMessage"] != null ||
+TempData["WarningMessage"] != null
+)
 {
     @if (TempData["SuccessMessage"] != null)
     {
@@ -13,18 +13,27 @@
                 }
             )
         </script>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
         <script>
             $(document).ready(() => {
                     ShowMessage('خطا', '@TempData["ErrorMessage"]', 'error');
                 }
             )
         </script>
+    }@
+    if (TempData["WarningMessage"] != null)
+    {
         <script>
             $(document).ready(() => {
                     ShowMessage('اخطار', '@TempData["WarningMessage"]', 'warning');
                 }
             )
         </script>
+    }@
+    if (TempData["InfoMessage"] != null)
+    {
         <script>
             $(document).ready(() => {
                     ShowMessage('اطلاعیه', '@TempData["SuccessMessage"]', 'info');

@@ -1,8 +1,12 @@
-﻿
+﻿@model MarketPlace.DataLayer.DTOs.RegisterUserDTO
+
 @{
     ViewData["Title"] = "ثبت نام";
 }
 
+@section script{
+    <partial name="_jqueryValidatord"/>
+}
 <!--breadcrumbs area start-->
 <div class="breadcrumbs_area">
     <div class="container">
@@ -18,49 +22,37 @@
         </div>
     </div>
 </div>
-<!--breadcrumbs area end-->
-<!-- customer login start -->
 <div class="customer_login mt-60">
     <div class="container">
         <div class="row">
-            <!--login area start-->
-            <!--<div class="col-lg-6 col-md-6">
-                <div class="account_form">
-                    <h2>ورود</h2>
-                    <form action="#">
-                        <p>
-                            <label>نام کاربری یا ایمیل <span>*</span></label>
-                            <input type="text">
-                        </p>
-                        <p>
-                            <label>رمز عبور <span>*</span></label>
-                            <input type="password">
-                        </p>
-                        <div class="login_submit">
-                            <a href="#">رمز عبور خود را فراموش کرده اید؟</a>
-                            <label for="remember">
-                                <input id="remember" type="checkbox"> به خاطر سپاری
-                            </label>
-                            <button type="submit">ورود</button>
-
-                        </div>
-
-                    </form>
-                </div>
-            </div>-->
-            <!--login area start-->
-            <!--register area start-->
             <div class="col-lg-6 col-md-6 offset-lg-3 offset-md-3">
                 <div class="account_form register">
                     <h2>ثبت نام</h2>
-                    <form action="#">
+                    <form method="post" asp-controller="Account" asp-action="Register">
                         <p>
-                            <label>آدرس ایمیل <span>*</span></label>
-                            <input type="text">
+                            <label>نام<span>*</span></label>
+                            <input type="text" asp-for="FirstName">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </p>
+                        <p>
+                            <label>نام خانوادگی<span>*</span></label>
+                            <input type="text" asp-for="LastName">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </p>
+                        <p>
+                            <label>تلفن همراه<span>*</span></label>
+                            <input type="text" asp-for="Mobile">
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
                         </p>
                         <p>
                             <label>رمز عبور <span>*</span></label>
-                            <input type="password">
+                            <input type="password" asp-for="Password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </p>
+                        <p>
+                            <label>رمز عبور <span>*</span></label>
+                            <input type="password" asp-for="ConfirmPassword">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </p>
                         <div class="login_submit">
                             <button type="submit">ثبت نام</button>
@@ -68,8 +60,6 @@
                     </form>
                 </div>
             </div>
-            <!--register area end-->
         </div>
     </div>
 </div>
-<!-- customer login end -->

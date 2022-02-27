@@ -43,19 +43,21 @@ namespace MarketPlace.Application.Services.Implementations
                     FirstName = register.FirstName,
                     LastName = register.LastName,
                     Mobile = register.Mobile,
-                    Password = _passwordHelper.EncodePasswordMd5(register.Password)
+                    Password = _passwordHelper.EncodePasswordMd5(register.Password),
+                    MobileActiveCode = new Random().Next(10000, 99999).ToString(),
+                    EmailActiveCode = Guid.NewGuid().ToString("N")
                 };
                 await _usesRepository.AddEntity(user);
                 await _usesRepository.SaveChanges();
                 // todo : send sms here
-                return RegisterUserResult.Success;                                                       
+                return RegisterUserResult.Success;
             }
             else
             {
                 return RegisterUserResult.MobileExists;
-            }
 
-            return RegisterUserResult.Error;
+            }
+            //return RegisterUserResult.Error;
         }
 
         public async Task<bool> IsUserExistsByMobileNumber(string mobile)
