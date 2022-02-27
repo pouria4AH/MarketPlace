@@ -5,9 +5,9 @@ namespace MarketPlace.Web.Controllers
 {
     public class SiteBaseController : Controller
     {
-        #region constractore
-
-
-        #endregion
+        protected string ErrorMessage = "ErrorMessage";
+        protected string InfoMessage = "InfoMessage";
+        protected string SuccessMessage = "SuccessMessage";
+        protected string WarningMessage = "WarningMessage";
     }
 }

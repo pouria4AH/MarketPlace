@@ -11,13 +11,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.ico">
 
-    <!-- CSS
-    ========================= -->
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="~/css/plugins.css">
-
-    <!-- Main Style CSS -->
-    <link rel="stylesheet" href="~/css/style.css">
+    <partial name="_HederRef" />
 
 </head>
 
@@ -243,12 +237,8 @@
     @await Component.InvokeAsync("SiteFooter")
     <!-- JS
     ============================================ -->
-    <!-- Plugins JS -->
-    <script src="~/js/plugins.js"></script>
-
-    <!-- Main JS -->
-    <script src="~/js/main.js"></script>
-
+    <partial name="_FooterRef" />
+    <partial name="_SiteMessages" />
 
 
 </body>
