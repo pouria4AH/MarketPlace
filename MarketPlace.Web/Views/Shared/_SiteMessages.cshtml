@@ -22,8 +22,8 @@ TempData["WarningMessage"] != null
                 }
             )
         </script>
-    }@
-    if (TempData["WarningMessage"] != null)
+    }
+    @if (TempData["WarningMessage"] != null)
     {
         <script>
             $(document).ready(() => {
@@ -31,8 +31,8 @@ TempData["WarningMessage"] != null
                 }
             )
         </script>
-    }@
-    if (TempData["InfoMessage"] != null)
+    }
+    @if (TempData["InfoMessage"] != null)
     {
         <script>
             $(document).ready(() => {

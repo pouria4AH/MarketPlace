@@ -14,7 +14,7 @@
                 <div class="breadcrumb_content">
                     <ul>
                         <li><a href="index.html">خانه</a></li>
-                        <li>حساب کاربری</li>
+                        <li> ورود به حساب کاربری</li>
                     </ul>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                     <h2>@ViewData["Title"]</h2>
                     <form method="post" asp-controller="Account" asp-action="Login">
                         <p>
-                            <label>مبایل<span>*</span></label>
+                            <label>موبایل<span>*</span></label>
                             <input type="text" asp-for="Mobile">
                             <span asp-validation-for="Mobile" class="text-danger"></span>
                         </p>
@@ -39,7 +39,7 @@
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </p>
                         <div class="login_submit">
-                            <button type="submit">ثبت نام</button>
+                            <button type="submit">ورود</button>
                         </div>
                     </form>
                 </div>
