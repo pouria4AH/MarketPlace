@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs;
+using MarketPlace.DataLayer.DTOs.Account;
 using MarketPlace.DataLayer.Entities.Account;
 using MarketPlace.DataLayer.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -52,11 +53,8 @@ namespace MarketPlace.Application.Services.Implementations
                 // todo : send sms here
                 return RegisterUserResult.Success;
             }
-            else
-            {
-                return RegisterUserResult.MobileExists;
+            return RegisterUserResult.MobileExists;
 
-            }
             //return RegisterUserResult.Error;
         }
 

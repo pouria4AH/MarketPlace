@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using MarketPlace.DataLayer.DTOs.Site;
 
-namespace MarketPlace.DataLayer.DTOs
+namespace MarketPlace.DataLayer.DTOs.Account
 {
-    public class LoginUserDTO
+    public class LoginUserDTO : CaptchaViewModel
     {
         [Display(Name = "تلفن همراه")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

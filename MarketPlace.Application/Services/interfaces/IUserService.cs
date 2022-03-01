@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MarketPlace.DataLayer.DTOs;
+using MarketPlace.DataLayer.DTOs.Account;
 using MarketPlace.DataLayer.Entities.Account;
 
 namespace MarketPlace.Application.Services.interfaces

@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using GoogleReCaptcha.V3;
+using GoogleReCaptcha.V3.Interface;
 using MarketPlace.Application.Services.Implementations;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.Context;
@@ -36,6 +38,7 @@ namespace MarketPlace.Web
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordHelper, PasswordHelper>();
+            services.AddHttpClient<ICaptchaValidator,GoogleReCaptchaValidator>();
             #endregion
 
             #region config database

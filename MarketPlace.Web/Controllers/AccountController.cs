@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using GoogleReCaptcha.V3.Interface;
 using MarketPlace.Application.Services.interfaces;
-using MarketPlace.DataLayer.DTOs;
+using MarketPlace.DataLayer.DTOs.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -16,10 +15,11 @@ namespace MarketPlace.Web.Controllers
         #region constractore
 
         private readonly IUserService _userService;
-
-        public AccountController(IUserService userService)
+        private readonly ICaptchaValidator _captchaValidator;
+        public AccountController(IUserService userService, ICaptchaValidator captchaValidator)
         {
             _userService = userService;
+            _captchaValidator = captchaValidator;
         }
 
         #endregion
@@ -35,6 +35,11 @@ namespace MarketPlace.Web.Controllers
         [HttpPost("register"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserDTO register)
         {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(register.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپجای شما تایید نشد";
+                return View("Login");
+            }
             if (ModelState.IsValid)
             {
                 var res = await _userService.RegisterUser(register);
@@ -70,12 +75,18 @@ namespace MarketPlace.Web.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {
+
             if (User.Identity.IsAuthenticated) return Redirect("/");
             return View();
         }
         [HttpPost("login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginUserDTO login)
         {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپجای شما تایید نشد";
+                return View("Login");
+            }
             if (ModelState.IsValid)
             {
                 var res = await _userService.GetUserForLogin(login);
@@ -118,6 +129,7 @@ namespace MarketPlace.Web.Controllers
         [HttpGet("log-out")]
         public async Task<IActionResult> LogOut()
         {
+
             await HttpContext.SignOutAsync();
             return Redirect("./");
         }
