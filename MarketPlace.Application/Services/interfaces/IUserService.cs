@@ -14,6 +14,7 @@ namespace MarketPlace.Application.Services.interfaces
         Task<bool> IsUserExistsByMobileNumber(string mobile);
         Task<LoginUserResult> GetUserForLogin(LoginUserDTO login);
         Task<User> GetUserByMobile(string mobile);
+        Task<ForgotPassUserResult> RecoverUserPassword(ForgotPassUserDTO forgot);
 
         #endregion
     }

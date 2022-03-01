@@ -78,6 +78,18 @@ namespace MarketPlace.Application.Services.Implementations
             return await _usesRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.Mobile == mobile);
         }
 
+        public async Task<ForgotPassUserResult> RecoverUserPassword(ForgotPassUserDTO forgot)
+        {
+            var user = await _usesRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Mobile == forgot.Mobile);
+            if (user == null) return ForgotPassUserResult.NotFound;
+            var newPass = new Random().Next(100000, 999999).ToString();
+            user.Password = _passwordHelper.EncodePasswordMd5(newPass);
+            //todo : send pass by sms here
+            await _usesRepository.SaveChanges();
+            return ForgotPassUserResult.Success;
+        }
+
         #endregion
 
     }
