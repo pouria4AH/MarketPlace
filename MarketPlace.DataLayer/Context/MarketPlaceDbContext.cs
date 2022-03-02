@@ -1,11 +1,17 @@
 ﻿using System.Linq;
 using MarketPlace.DataLayer.Entities.Account;
+using MarketPlace.DataLayer.Entities.Site;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.DataLayer.Context
 {
     public class MarketPlaceDbContext : DbContext
     {
+        #region site
+
+        public DbSet<SiteSetting> SiteSettings { get; set; }
+
+        #endregion
         #region account
 
         public DbSet<User> Users { get; set; }
@@ -15,7 +21,7 @@ namespace MarketPlace.DataLayer.Context
         {
 
         }
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,4 +32,5 @@ namespace MarketPlace.DataLayer.Context
             base.OnModelCreating(modelBuilder);
         }
     }
+
 }

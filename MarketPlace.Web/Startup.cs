@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using GoogleReCaptcha.V3;
 using GoogleReCaptcha.V3.Interface;
 using MarketPlace.Application.Services.Implementations;
@@ -38,6 +34,7 @@ namespace MarketPlace.Web
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordHelper, PasswordHelper>();
+            services.AddScoped<ISiteService, SiteService>();
             services.AddHttpClient<ICaptchaValidator,GoogleReCaptchaValidator>();
             #endregion
 
