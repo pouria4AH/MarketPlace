@@ -14,5 +14,11 @@ namespace MarketPlace.Application.Services.interfaces
          Task<SiteSetting> GetDefaultSiteSetting();
 
         #endregion
+
+        #region slider
+
+        Task<List<Slider>> GetAllActiveSlide();
+
+        #endregion
     }
 }

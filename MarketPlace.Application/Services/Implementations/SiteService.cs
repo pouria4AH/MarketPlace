@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.Entities.Site;
@@ -12,10 +13,12 @@ namespace MarketPlace.Application.Services.Implementations
         #region constaructor
 
         private readonly IGenericRepository<SiteSetting> _siteGenericRepository;
+        private readonly IGenericRepository<Slider> _slisderRepository;
 
-        public SiteService(IGenericRepository<SiteSetting> siteGenericRepository)
+        public SiteService(IGenericRepository<SiteSetting> siteGenericRepository, IGenericRepository<Slider> slisderRepository)
         {
             _siteGenericRepository = siteGenericRepository;
+            _slisderRepository = slisderRepository;
         }
 
         #endregion
@@ -30,11 +33,20 @@ namespace MarketPlace.Application.Services.Implementations
 
         #endregion
 
+        #region slider
+
+        public async Task<List<Slider>> GetAllActiveSlide()
+        {
+            return await _slisderRepository.GetQuery().AsQueryable().Where(x => x.IsActive && !x.IsDelete).ToListAsync();
+        }
+
+        #endregion
         #region dispose
 
         public async ValueTask DisposeAsync()
         {
-            await _siteGenericRepository.DisposeAsync();
+            if (_siteGenericRepository != null) await _siteGenericRepository.DisposeAsync();
+            if (_slisderRepository != null) await _slisderRepository.DisposeAsync();
         }
 
 

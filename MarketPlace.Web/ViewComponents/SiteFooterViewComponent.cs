@@ -41,4 +41,24 @@ namespace MarketPlace.Web.ViewComponents
     }
     #endregion
 
+    #region home slider
+
+    public class HomeSliderViewComponent : ViewComponent
+    {
+        private readonly ISiteService _siteService;
+
+        public HomeSliderViewComponent(ISiteService siteService)
+        {
+            _siteService = siteService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var slider = await _siteService.GetAllActiveSlide();
+            return View("HomeSlider", slider);
+        }
+    }
+
+    #endregion
+
 }
