@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayer.Entities.Common;
+using MarketPlace.DataLayer.Entities.Contact;
 
 namespace MarketPlace.DataLayer.Entities.Account
 {
@@ -53,6 +55,10 @@ namespace MarketPlace.DataLayer.Entities.Account
         [Display(Name = "اواتار")]
         public string Avatar { get; set; }
 
+        #endregion
+
+        #region relations
+        public ICollection<ContactUs> ContactUses { get; set; }
         #endregion
     }
 }
