@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using MarketPlace.Application.Services.interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MarketPlace.Web.Controllers
 {
     public class HomeController : SiteBaseController
     {
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
-       
+
     }
 }

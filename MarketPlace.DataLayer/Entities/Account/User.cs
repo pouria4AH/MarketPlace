@@ -25,7 +25,7 @@ namespace MarketPlace.DataLayer.Entities.Account
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Mobile { get; set; }
 
-        [Display(Name = "ایمیل فعال / غیر فعال")]
+        [Display(Name = "تلفن همراه فعال / غیر فعال")]
         public bool IsMobileActive { get; set; }
 
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

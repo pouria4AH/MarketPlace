@@ -61,12 +61,47 @@ namespace MarketPlace.Web.Controllers
                     case RegisterUserResult.Success:
                         TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
                         TempData[InfoMessage] = "کد تایید تلفن همراه برای شما ارسال شد";
-                        return RedirectToAction("Login");
+                        return RedirectToAction("ActivateMobile", "Account", new { mobile = register.Mobile });
                 }
             }
 
             return View(register);
         }
+
+        #endregion
+
+        #region ActiveteMobile
+
+        [HttpGet("activate-mobile/{mobile}")]
+        public IActionResult ActivateMobile(string mobile)
+        {
+            if (User.Identity.IsAuthenticated) return Redirect("/");
+            var activeDTO = new ActivateMobileDTO { Mobile = mobile };
+            return View(activeDTO);
+        }
+        [HttpPost("activate-mobile/{mobile}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateMobile(ActivateMobileDTO activate)
+        {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(activate.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپجای شما تایید نشد";
+                return View("Login");
+            }
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.ActiveMobile(activate);
+                if (res)
+                {
+                    TempData[SuccessMessage] = "حساب فعال شد";
+                    return RedirectToAction("Login");
+                }
+
+                TempData[ErrorMessage] = "کاربری یافت نشد";
+            }
+
+            return View(activate);
+        }
+
 
         #endregion
 

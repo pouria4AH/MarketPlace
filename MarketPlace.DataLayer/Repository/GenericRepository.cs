@@ -26,6 +26,7 @@ namespace MarketPlace.DataLayer.Repository
         public async Task AddEntity(TEntity entity)
         {
             entity.CreateDate = DateTime.Now;
+            entity.LastUpdateDate = DateTime.Now;
             await _dbSet.AddAsync(entity);
         }
 
@@ -49,7 +50,7 @@ namespace MarketPlace.DataLayer.Repository
         public async Task DeleteEntity(long entityId)
         {
             TEntity entity = await GetEntityById(entityId);
-            if(entity != null) DeleteEntity(entity);
+            if (entity != null) DeleteEntity(entity);
         }
 
         public void DeletePermanent(TEntity entity)

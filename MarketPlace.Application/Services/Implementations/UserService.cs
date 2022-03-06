@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
-using MarketPlace.DataLayer.DTOs;
 using MarketPlace.DataLayer.DTOs.Account;
 using MarketPlace.DataLayer.Entities.Account;
 using MarketPlace.DataLayer.Repository;
@@ -18,10 +15,12 @@ namespace MarketPlace.Application.Services.Implementations
 
         private readonly IGenericRepository<User> _usesRepository;
         private readonly IPasswordHelper _passwordHelper;
-        public UserService(IGenericRepository<User> usesRepository, IPasswordHelper passwordHelper)
+        private readonly ISmsService _smsService;
+        public UserService(IGenericRepository<User> usesRepository, IPasswordHelper passwordHelper, ISmsService smsService)
         {
             _usesRepository = usesRepository;
             _passwordHelper = passwordHelper;
+            _smsService = smsService;
         }
         #endregion
 
@@ -50,7 +49,8 @@ namespace MarketPlace.Application.Services.Implementations
                 };
                 await _usesRepository.AddEntity(user);
                 await _usesRepository.SaveChanges();
-                // todo : send sms here
+                //await _smsService.SendVerfiySms(user.Mobile,user.MobileActiveCode);
+                Console.WriteLine(user.MobileActiveCode);
                 return RegisterUserResult.Success;
             }
             return RegisterUserResult.MobileExists;
@@ -88,6 +88,24 @@ namespace MarketPlace.Application.Services.Implementations
             //todo : send pass by sms here
             await _usesRepository.SaveChanges();
             return ForgotPassUserResult.Success;
+        }
+
+        public async Task<bool> ActiveMobile(ActivateMobileDTO activate)
+        {
+           var user = await  _usesRepository.GetQuery().AsQueryable()
+               .SingleOrDefaultAsync(x => x.Mobile == activate.Mobile);
+           if (user != null)
+           {
+               if (user.MobileActiveCode == activate.MobileActiveCode)
+               {
+                   user.IsMobileActive = true;
+                   user.MobileActiveCode = new Random().Next(100000, 999999).ToString();
+                   await _usesRepository.SaveChanges();
+                   return true;
+               }
+           }
+
+           return false;
         }
 
         #endregion
