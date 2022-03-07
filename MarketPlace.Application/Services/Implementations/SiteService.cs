@@ -14,11 +14,13 @@ namespace MarketPlace.Application.Services.Implementations
 
         private readonly IGenericRepository<SiteSetting> _siteGenericRepository;
         private readonly IGenericRepository<Slider> _slisderRepository;
+        private readonly IGenericRepository<SiteBanner> _siteBannerRepository;
 
-        public SiteService(IGenericRepository<SiteSetting> siteGenericRepository, IGenericRepository<Slider> slisderRepository)
+        public SiteService(IGenericRepository<SiteSetting> siteGenericRepository, IGenericRepository<Slider> slisderRepository, IGenericRepository<SiteBanner> siteBannerRepository)
         {
             _siteGenericRepository = siteGenericRepository;
             _slisderRepository = slisderRepository;
+            _siteBannerRepository = siteBannerRepository;
         }
 
         #endregion
@@ -41,12 +43,24 @@ namespace MarketPlace.Application.Services.Implementations
         }
 
         #endregion
+
+
+        #region site banner
+
+        public async Task<List<SiteBanner>> GetSiteBannerByPlacement(List<SiteBannerPlacement> placements)
+        {
+            return await _siteBannerRepository.GetQuery().AsQueryable()
+                .Where(f => placements.Any(x => x == f.BannerPlacement)).ToListAsync();
+        }
+
+        #endregion
         #region dispose
 
         public async ValueTask DisposeAsync()
         {
             if (_siteGenericRepository != null) await _siteGenericRepository.DisposeAsync();
             if (_slisderRepository != null) await _slisderRepository.DisposeAsync();
+            if (_siteBannerRepository != null) _siteBannerRepository.DisposeAsync();
         }
 
 

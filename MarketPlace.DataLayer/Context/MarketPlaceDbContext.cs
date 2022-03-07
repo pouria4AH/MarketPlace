@@ -26,6 +26,9 @@ namespace MarketPlace.DataLayer.Context
         #region contact
         public DbSet<ContactUs> ContactUs { get; set; }
         #endregion
+        #region site banner
+        public DbSet<SiteBanner> SiteBanners { get; set; }
+        #endregion
         #region config
         public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options)
         {

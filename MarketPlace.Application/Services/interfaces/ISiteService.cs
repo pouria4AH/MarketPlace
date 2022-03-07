@@ -20,5 +20,11 @@ namespace MarketPlace.Application.Services.interfaces
         Task<List<Slider>> GetAllActiveSlide();
 
         #endregion
+
+        #region site banner
+
+        Task<List<SiteBanner>> GetSiteBannerByPlacement(List<SiteBannerPlacement> placements);
+
+        #endregion
     }
 }
