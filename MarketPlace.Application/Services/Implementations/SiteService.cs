@@ -50,7 +50,7 @@ namespace MarketPlace.Application.Services.Implementations
         public async Task<List<SiteBanner>> GetSiteBannerByPlacement(List<SiteBannerPlacement> placements)
         {
             return await _siteBannerRepository.GetQuery().AsQueryable()
-                .Where(f => placements.Any(x => x == f.BannerPlacement)).ToListAsync();
+                .Where(f => placements.Contains(f.BannerPlacement)).ToListAsync();
         }
 
         #endregion
