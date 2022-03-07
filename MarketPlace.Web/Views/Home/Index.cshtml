@@ -1,7 +1,11 @@
-﻿@{
+﻿@using MarketPlace.DataLayer.Entities.Site
+@using MarketPlace.Application.EntitiesExtensions
+@{
     ViewData["Title"] = "Home Page";
 }
-
+@{
+    var banners = ViewBag.banners as List<SiteBanner>; 
+}
 <!--slider area start-->
 @await Component.InvokeAsync("HomeSlider")
 <!--slider area end-->
@@ -58,33 +62,25 @@
 </section>
 <!--shipping area end-->
 <!--banner area start-->
-<div class="banner_area mb-40">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-3">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="~/img/bg/banner1.jpg" alt=""></a>
+@if (banners != null && banners.Any(x => x.BannerPlacement == SiteBannerPlacement.Home_1))
+{
+    <div class="banner_area mb-40">
+        <div class="container">
+            <div class="row">
+                @foreach(var banner in banners.Where(x=> x.BannerPlacement == SiteBannerPlacement.Home_1))
+                {
+                <div class="@banner.ColeSize">
+                    <div class="single_banner mb-30">
+                        <div class="banner_thumb">
+                            <a href="@banner.Url"><img src="@banner.GetSiteBannerAddress()"></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="~/img/bg/banner2.jpg" alt=""></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="~/img/bg/banner3.jpg" alt=""></a>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
-</div>
+}
 <!--banner area end-->
 <!--product area start-->
 <section class="product_area mb-46">

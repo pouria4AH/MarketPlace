@@ -7,7 +7,15 @@ namespace MarketPlace.Application.EntitiesExtensions
     {
         public static string GetSliderImageAddress(this Slider slider)
         {
-            return PathExtension.SlideOrgin + slider.ImageName;
+            return PathExtension.SlideOrigin + slider.ImageName;
+        }
+    }
+
+    public static class SiteBannerExtensions
+    {
+        public static string GetSiteBannerAddress(this SiteBanner banner)
+        {
+            return PathExtension.SiteBannerOrigin + banner.ImageAddress;
         }
     }
 }

@@ -3,9 +3,11 @@
     public static class PathExtension
     {
         #region slider
+        public static string SlideOrigin = "/img/slider/";
+        #endregion
 
-        public static string SlideOrgin = "/img/slider/";
-
+        #region site banner
+        public static string SiteBannerOrigin = "/img/bg/";
         #endregion
     }
 }

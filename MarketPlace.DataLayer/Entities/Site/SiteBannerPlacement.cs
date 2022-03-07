@@ -3,7 +3,7 @@
     public enum SiteBannerPlacement
     {
         Home_1,
-        Home2,
+        Home_2,
         Home_3
     }
 }
