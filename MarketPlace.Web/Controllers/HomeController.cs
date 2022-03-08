@@ -24,6 +24,7 @@ namespace MarketPlace.Web.Controllers
         }
 
         #endregion
+
         #region index
         public async Task<IActionResult> Index()
         {
@@ -63,6 +64,15 @@ namespace MarketPlace.Web.Controllers
             return View(contact);
         }
 
+        #endregion
+
+        #region about us
+        [HttpGet("about-us")]
+        public async Task<IActionResult> AboutUs()
+        {
+            var siteSetting = await _siteService.GetDefaultSiteSetting();
+            return View(siteSetting);
+        }
         #endregion
     }
 }

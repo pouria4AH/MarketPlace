@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayer.Entities.Common;
 
 namespace MarketPlace.DataLayer.Entities.Site
@@ -23,6 +18,8 @@ namespace MarketPlace.DataLayer.Entities.Site
         public string Email { get; set; }
         [Display(Name = "نقشه")]
         public string MapScript { get; set; }
+        [Display(Name = "درباره ما")]
+        public string AboutUs { get; set; }
         [Display(Name = "کپی رایت")]
         public string CopyRight { get; set; }
         [Display(Name = "اصلی هست یا خیر")]
