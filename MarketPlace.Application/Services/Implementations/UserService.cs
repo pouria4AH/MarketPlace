@@ -85,7 +85,8 @@ namespace MarketPlace.Application.Services.Implementations
             if (user == null) return ForgotPassUserResult.NotFound;
             var newPass = new Random().Next(100000, 999999).ToString();
             user.Password = _passwordHelper.EncodePasswordMd5(newPass);
-            //todo : send pass by sms here
+            //await _smsService.SendUserPassword(user.Mobile, newPass);
+            Console.WriteLine(newPass);
             await _usesRepository.SaveChanges();
             return ForgotPassUserResult.Success;
         }
