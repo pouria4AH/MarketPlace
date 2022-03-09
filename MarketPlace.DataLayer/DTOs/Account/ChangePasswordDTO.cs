@@ -3,7 +3,7 @@ using MarketPlace.DataLayer.DTOs.Site;
 
 namespace MarketPlace.DataLayer.DTOs.Account
 {
-    public class ChangePasswordDTO : CaptchaViewModel
+    public class ChangePasswordDTO 
     {
         [Display(Name = "کلمه عبور")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

@@ -93,20 +93,38 @@ namespace MarketPlace.Application.Services.Implementations
 
         public async Task<bool> ActiveMobile(ActivateMobileDTO activate)
         {
-           var user = await  _usesRepository.GetQuery().AsQueryable()
-               .SingleOrDefaultAsync(x => x.Mobile == activate.Mobile);
-           if (user != null)
-           {
-               if (user.MobileActiveCode == activate.MobileActiveCode)
-               {
-                   user.IsMobileActive = true;
-                   user.MobileActiveCode = new Random().Next(100000, 999999).ToString();
-                   await _usesRepository.SaveChanges();
-                   return true;
-               }
-           }
+            var user = await _usesRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(x => x.Mobile == activate.Mobile);
+            if (user != null)
+            {
+                if (user.MobileActiveCode == activate.MobileActiveCode)
+                {
+                    user.IsMobileActive = true;
+                    user.MobileActiveCode = new Random().Next(100000, 999999).ToString();
+                    await _usesRepository.SaveChanges();
+                    return true;
+                }
+            }
 
-           return false;
+            return false;
+        }
+
+        public async Task<bool> ChangePassword(ChangePasswordDTO changePasswordDto, long UserId)
+        {
+            var user = await _usesRepository.GetEntityById(UserId);
+            if (user != null)
+            {
+                var newPass = _passwordHelper.EncodePasswordMd5(changePasswordDto.NewPassword);
+                if (newPass != user.Password)
+                {
+                    user.Password = newPass;
+                     _usesRepository.EditEntity(user);
+                    await _usesRepository.SaveChanges();
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
