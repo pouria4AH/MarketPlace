@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using MarketPlace.DataLayer.DTOs.Account;
 
 namespace MarketPlace.Web.Areas.User.Controllers
 {
@@ -11,9 +12,14 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #endregion
 
-        #region dashboard
-        [HttpGet("dashboard")]
-        public async Task<IActionResult> Dashboard()
+        #region change passworld
+        [HttpGet("change-password")]
+        public async Task<IActionResult> ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost("change-password"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePasswordDto)
         {
             return View();
         }
