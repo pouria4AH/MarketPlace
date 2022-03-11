@@ -53,14 +53,33 @@ namespace MarketPlace.Web.Areas.User.Controllers
         [HttpGet("edit-profile")]
         public async Task<IActionResult> EditProfile()
         {
-            var userProfile =await _userService.GetProfileForEdit(User.GetUserId());
+            var userProfile = await _userService.GetProfileForEdit(User.GetUserId());
             if (userProfile == null) return NotFound();
             return View(userProfile);
         }
-        [HttpPost("edit-profile"),ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(EditProfileDTO editProfileDto)
+        [HttpPost("edit-profile"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfileDTO profile)
         {
-            return View();
+            var res = await _userService.EditUserProfile(profile, User.GetUserId());
+            if (ModelState.IsValid)
+            {
+                switch (res)
+                {
+                    case EditUserProfileResult.IsBlocked:
+                        TempData[ErrorMessage] = "شما مسدود شده اید";
+                        break;
+                    case EditUserProfileResult.IsNotActive:
+                        TempData[ErrorMessage] = "حساب کاربری شما فعال نشده";
+                        break;
+                    case EditUserProfileResult.NotFound:
+                        TempData[ErrorMessage] = "کاربری با مشخصات زیر یافت نشد";
+                        break;
+                    case EditUserProfileResult.Success:
+                        TempData[SuccessMessage] = "عملیات با موفقعیت انجام شد";
+                        break;
+                }
+            }
+            return View(profile);
         }
 
         #endregion

@@ -22,4 +22,12 @@ namespace MarketPlace.DataLayer.DTOs.Account
         [Display(Name = "اواتار")]
         public string Avatar { get; set; }
     }
+
+    public enum EditUserProfileResult
+    {
+        NotFound,
+        IsBlocked,
+        IsNotActive,
+        Success
+    }
 }

@@ -139,6 +139,21 @@ namespace MarketPlace.Application.Services.Implementations
             };
         }
 
+        public async Task<EditUserProfileResult> EditUserProfile(EditProfileDTO dto, long userId)
+        {
+            var user = await _usesRepository.GetEntityById(userId);
+            if (user == null) return EditUserProfileResult.NotFound;
+
+            if (user.IsBlocked) return EditUserProfileResult.IsBlocked;
+            if (!user.IsMobileActive) return EditUserProfileResult.IsNotActive;
+
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            _usesRepository.EditEntity(user);
+            await _usesRepository.SaveChanges();
+            return EditUserProfileResult.Success;
+        }
+
         #endregion
 
     }
