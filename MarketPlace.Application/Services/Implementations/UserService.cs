@@ -118,13 +118,25 @@ namespace MarketPlace.Application.Services.Implementations
                 if (newPass != user.Password)
                 {
                     user.Password = newPass;
-                     _usesRepository.EditEntity(user);
+                    _usesRepository.EditEntity(user);
                     await _usesRepository.SaveChanges();
                     return true;
                 }
             }
 
             return false;
+        }
+
+        public async Task<EditProfileDTO> GetProfileForEdit(long id)
+        {
+            var user = await _usesRepository.GetEntityById(id);
+            if (user == null) return null;
+            return new EditProfileDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Avatar = user.Avatar
+            };
         }
 
         #endregion

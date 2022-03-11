@@ -49,5 +49,20 @@ namespace MarketPlace.Web.Areas.User.Controllers
         }
         #endregion
 
+        #region edit profile
+        [HttpGet("edit-profile")]
+        public async Task<IActionResult> EditProfile()
+        {
+            var userProfile =await _userService.GetProfileForEdit(User.GetUserId());
+            if (userProfile == null) return NotFound();
+            return View(userProfile);
+        }
+        [HttpPost("edit-profile"),ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfileDTO editProfileDto)
+        {
+            return View();
+        }
+
+        #endregion
     }
 }
