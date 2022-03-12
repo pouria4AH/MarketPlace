@@ -8,11 +8,11 @@ namespace MarketPlace.DataLayer.Entities.Contact
     {
         #region properties
         public long TicketId { get; set; }
+
         public long SenderId { get; set; }
 
         [Display(Name = "متن")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Text { get; set; }
         #endregion
 

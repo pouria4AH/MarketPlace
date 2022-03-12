@@ -11,11 +11,14 @@ namespace MarketPlace.Application.Services.Implementations
     {
         #region constractore
 
-        private readonly IGenericRepository<ContactUs> _repository;
-
-        public ContactService(IGenericRepository<ContactUs> repository)
+        private readonly IGenericRepository<ContactUs> _contactUsRepository;
+        private readonly IGenericRepository<Ticket> _ticketRepository;
+        private readonly IGenericRepository<TicketMessage> _ticketMessageRepository;
+        public ContactService(IGenericRepository<ContactUs> contactUsRepository, IGenericRepository<Ticket> ticketRepository, IGenericRepository<TicketMessage> ticketMessageRepository)
         {
-            _repository = repository;
+            _contactUsRepository = contactUsRepository;
+            _ticketRepository = ticketRepository;
+            _ticketMessageRepository = ticketMessageRepository;
         }
 
         #endregion
@@ -31,14 +34,46 @@ namespace MarketPlace.Application.Services.Implementations
                 Subject = contact.Subject,
                 Text = contact.Text
             };
-            await _repository.AddEntity(contactUs);
-            await _repository.SaveChanges();
+            await _contactUsRepository.AddEntity(contactUs);
+            await _contactUsRepository.SaveChanges();
         }
+        #endregion
+        #region Ticket
+
+        public async Task<AddTicketResult> AddUserTicket(AddTicketViewModel ticket, long userId)
+        {
+            if (!string.IsNullOrEmpty(ticket.Text)) return AddTicketResult.Error;
+
+            var newTicket = new Ticket
+            {
+                OwnerId = userId,
+                IsReadByOwner = true,
+                Title = ticket.Title,
+                TicketSection = ticket.TicketSection,
+                TicketPriorIty = ticket.TicketPriorIty,
+                TicketState = TicketState.UnderProcess
+            };
+            await _ticketRepository.AddEntity(newTicket);
+            await _ticketRepository.SaveChanges();
+            // Ticket Message
+            var newMessage = new TicketMessage
+            {
+                TicketId = newTicket.Id,
+                Text = ticket.Text,
+                SenderId = userId
+            };
+
+            await _ticketMessageRepository.AddEntity(newMessage);
+            await _ticketMessageRepository.SaveChanges();
+
+            return AddTicketResult.Success;
+        }
+
         #endregion
         #region dispose
         public async ValueTask DisposeAsync()
         {
-            await _repository.DisposeAsync();
+            await _contactUsRepository.DisposeAsync();
         }
         #endregion
     }
