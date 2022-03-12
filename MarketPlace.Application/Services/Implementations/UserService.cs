@@ -160,6 +160,7 @@ namespace MarketPlace.Application.Services.Implementations
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
+
             _usesRepository.EditEntity(user);
             await _usesRepository.SaveChanges();
             return EditUserProfileResult.Success;

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.IO;
 using MarketPlace.Application.Utils;
 using Microsoft.AspNetCore.Http;
 
