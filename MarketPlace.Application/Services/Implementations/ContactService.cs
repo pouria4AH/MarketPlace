@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Contact;
 using MarketPlace.DataLayer.Entities.Contact;
 using MarketPlace.DataLayer.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Application.Services.Implementations
 {
-   public class ContactService : IContactService
+    public class ContactService : IContactService
     {
         #region constractore
 
@@ -28,7 +30,7 @@ namespace MarketPlace.Application.Services.Implementations
             var contactUs = new ContactUs
             {
                 FullName = contact.FullName,
-                UserId = userId != null && userId != 0 ? userId.Value : (long?) null,
+                UserId = userId != null && userId != 0 ? userId.Value : (long?)null,
                 UserIP = userIp,
                 Email = contact.Email,
                 Subject = contact.Subject,
@@ -67,6 +69,50 @@ namespace MarketPlace.Application.Services.Implementations
             await _ticketMessageRepository.SaveChanges();
 
             return AddTicketResult.Success;
+        }
+
+        public async Task<FilterTicketDTO> FilterTickets(FilterTicketDTO filter)
+        {
+            var query = _ticketRepository.GetQuery().AsQueryable();
+
+            #region state
+            switch (filter.FilterTicketState)
+            {
+                case FilterTicketState.All:
+                    break;
+                case FilterTicketState.Deleted:
+                    query = query.Where(x => x.IsDelete);
+                    break;
+                case FilterTicketState.NotDeleted:
+                    query = query.Where(x => !x.IsDelete);
+                    break;
+            }
+            #endregion
+            #region Order
+            switch (filter.OrderBy)
+            {
+                case FilterTicketOrder.CreateDate_AC:
+                    query = query.OrderBy(x => x.CreateDate);
+                    break;
+                case FilterTicketOrder.CreateDate_DC:
+                    query = query.OrderByDescending(x => x.CreateDate);
+                    break;
+            }
+            #endregion
+
+            #region filter
+
+            if (filter.FilterTicketState != null)
+                query = query.Where(x => x.TicketSection == filter.TicketSection.Value);
+            if (filter.TicketPriorIty != null)
+                query = query.Where(x => x.TicketPriorIty == filter.TicketPriorIty.Value);
+            if (filter.UserId != null && filter.UserId != 0)
+                query = query.Where(x => x.OwnerId == filter.UserId.Value);
+            if (!string.IsNullOrEmpty(filter.Title))
+                query = query.Where(x => EF.Functions.Like(x.Title, $"%{filter.Title}%"));
+
+            #endregion
+            return filter;
         }
 
         #endregion
