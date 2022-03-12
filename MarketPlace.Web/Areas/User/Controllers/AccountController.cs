@@ -4,6 +4,7 @@ using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Account;
 using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace MarketPlace.Web.Areas.User.Controllers
 {
@@ -58,9 +59,9 @@ namespace MarketPlace.Web.Areas.User.Controllers
             return View(userProfile);
         }
         [HttpPost("edit-profile"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(EditProfileDTO profile)
+        public async Task<IActionResult> EditProfile(EditProfileDTO profile ,IFormFile avatarImage)
         {
-            var res = await _userService.EditUserProfile(profile, User.GetUserId());
+            var res = await _userService.EditUserProfile(profile, User.GetUserId(),avatarImage);
             if (ModelState.IsValid)
             {
                 switch (res)
@@ -76,6 +77,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
                         break;
                     case EditUserProfileResult.Success:
                         TempData[SuccessMessage] = "عملیات با موفقعیت انجام شد";
+                        return RedirectToAction("EditProfile");
                         break;
                 }
             }

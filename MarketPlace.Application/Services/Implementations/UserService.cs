@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MarketPlace.Application.Extensions;
 using MarketPlace.Application.Services.interfaces;
+using MarketPlace.Application.Utils;
 using MarketPlace.DataLayer.DTOs.Account;
 using MarketPlace.DataLayer.Entities.Account;
 using MarketPlace.DataLayer.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Application.Services.Implementations
@@ -139,13 +143,20 @@ namespace MarketPlace.Application.Services.Implementations
             };
         }
 
-        public async Task<EditUserProfileResult> EditUserProfile(EditProfileDTO dto, long userId)
+        public async Task<EditUserProfileResult> EditUserProfile(EditProfileDTO dto, long userId, IFormFile avatarImage)
         {
             var user = await _usesRepository.GetEntityById(userId);
             if (user == null) return EditUserProfileResult.NotFound;
 
             if (user.IsBlocked) return EditUserProfileResult.IsBlocked;
             if (!user.IsMobileActive) return EditUserProfileResult.IsNotActive;
+
+            if (avatarImage != null && avatarImage.IsImage())
+            {
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(avatarImage.FileName);
+                avatarImage.AddImageToServer(imageName,PathExtension.UserAvatarOriginServer,100,100,PathExtension.UserAvatarThumbServer,user.Avatar);
+                user.Avatar = imageName;
+            }
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;

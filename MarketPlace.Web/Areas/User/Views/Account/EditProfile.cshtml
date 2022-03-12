@@ -35,7 +35,7 @@
                             <div class="login">
                                 <div class="login_form_container">
                                     <div class="account_login_form">
-                                        <form asp-area="User" asp-controller="Account" asp-action="EditProfile">
+                                        <form asp-area="User" enctype="multipart/form-data'' asp-controller="Account" asp-action="EditProfile" >
                                             <br>
                                             <label> نام</label>
                                             <input type="text" asp-for="FirstName">
@@ -46,7 +46,7 @@
                                             <span class="text-danger" asp-validation-for="LastName"></span>
                                             <br />
                                             <div class="col-md-9">
-                                                <input type="file" />
+                                                <input type="file" name="avatarImage" />
                                             </div>
                                             <div class="col-md-3">
                                                 <img style=" border-radius: 50%; width: 150px " src="@(!String.IsNullOrEmpty(Model.Avatar) ? PathExtension.UserAvatarOrigin + Model.Avatar : PathExtension.DefaultAvatar )" alt="Alternate Text"/>

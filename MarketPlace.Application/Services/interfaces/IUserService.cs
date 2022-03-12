@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MarketPlace.DataLayer.DTOs;
 using MarketPlace.DataLayer.DTOs.Account;
 using MarketPlace.DataLayer.Entities.Account;
+using Microsoft.AspNetCore.Http;
 
 namespace MarketPlace.Application.Services.interfaces
 {
@@ -18,7 +19,7 @@ namespace MarketPlace.Application.Services.interfaces
         Task<bool> ActiveMobile(ActivateMobileDTO activate);
         Task<bool> ChangePassword(ChangePasswordDTO changePasswordDto, long UserId);
         Task<EditProfileDTO> GetProfileForEdit(long id);
-        Task<EditUserProfileResult> EditUserProfile(EditProfileDTO editProfileDto,long userId);
+        Task<EditUserProfileResult> EditUserProfile(EditProfileDTO editProfileDto,long userId ,IFormFile avatarImage);
 
         #endregion
     }
