@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayer.Entities.Account;
 using MarketPlace.DataLayer.Entities.Common;
 
@@ -33,6 +34,7 @@ namespace MarketPlace.DataLayer.Entities.Contact
 
         #region relation
         public User Owner { get; set; }
+        public ICollection<TicketMessage> TicketMessages { get; set; }
         #endregion
     }
     public enum TicketSection

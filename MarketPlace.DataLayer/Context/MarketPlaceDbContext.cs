@@ -25,6 +25,8 @@ namespace MarketPlace.DataLayer.Context
         #endregion
         #region contact
         public DbSet<ContactUs> ContactUs { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketMessage> TicketMessages { get; set; }
         #endregion
         #region site banner
         public DbSet<SiteBanner> SiteBanners { get; set; }
@@ -35,12 +37,11 @@ namespace MarketPlace.DataLayer.Context
 
         }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
             {
-                relationship.DeleteBehavior = DeleteBehavior.Cascade;
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
             base.OnModelCreating(modelBuilder);
         }

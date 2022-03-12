@@ -42,7 +42,7 @@ namespace MarketPlace.Application.Services.Implementations
 
         public async Task<AddTicketResult> AddUserTicket(AddTicketViewModel ticket, long userId)
         {
-            if (!string.IsNullOrEmpty(ticket.Text)) return AddTicketResult.Error;
+            if (string.IsNullOrEmpty(ticket.Text)) return AddTicketResult.Error;
 
             var newTicket = new Ticket
             {

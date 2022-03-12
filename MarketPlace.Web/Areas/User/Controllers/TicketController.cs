@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Contact;
@@ -20,7 +17,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
         #endregion
 
         #region list
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -47,7 +44,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
                     case AddTicketResult.Success:
                         TempData[SuccessMessage] = "تیکت شما ثبت شد";
                         TempData[InfoMessage] = "جواب شما رو  زود میدیم";
-                        return RedirectToAction("Index");
+                        //return RedirectToAction("AddTicket");
                         break;
                 }
             }
