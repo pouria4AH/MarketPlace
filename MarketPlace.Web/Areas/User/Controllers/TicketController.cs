@@ -63,7 +63,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
         {
             var ticket = await _contactService.GetTicketForShow(ticketId, User.GetUserId());
             if (ticket == null) return NotFound();
-            return View();
+            return View(ticket);
         }
 
         #endregion
