@@ -1,4 +1,5 @@
-﻿@model MarketPlace.DataLayer.DTOs.Contact.FilterTicketDTO
+﻿@using MarketPlace.Application.Extensions
+@model MarketPlace.DataLayer.DTOs.Contact.FilterTicketDTO
 @{
     ViewData["Title"] = "Index";
 }
@@ -46,7 +47,9 @@
                                                 <tr>
                                                     <td>@ticket.Id</td>
                                                     <td>@ticket.Title</td>
-                                                    <td>______</td>
+                                                    <td>
+                                                        @ticket.TicketState.GetEnumName()
+                                                    </td>
                                                     <td><a href="#" class="view">نمایش جزیات</a></td>
                                                 </tr>
                                             }
