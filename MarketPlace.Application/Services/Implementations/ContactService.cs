@@ -102,7 +102,7 @@ namespace MarketPlace.Application.Services.Implementations
             #endregion
             #region filter
 
-            if (filter.FilterTicketState != null)
+            if (filter.TicketSection != null)
                 query = query.Where(x => x.TicketSection == filter.TicketSection.Value);
             if (filter.TicketPriorIty != null)
                 query = query.Where(x => x.TicketPriorIty == filter.TicketPriorIty.Value);
@@ -116,10 +116,9 @@ namespace MarketPlace.Application.Services.Implementations
             #region paging
 
             var ticketCount = await query.CountAsync();
-            var pager = Pager.Build(filter.PageId, filter.AllEntitiesCount, filter.TakeEntities,
-                filter.HowManyShowPageAfterAndBefore);
-            var allEntities = await query.paging(pager).ToListAsync();
-            
+            var pager = Pager.Build(filter.PageId, ticketCount, filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
+            var allEntities = await query.Paging(pager).ToListAsync();
+
             #endregion
             return filter.SetPaging(pager).SetTicket(allEntities);
         }
@@ -128,7 +127,9 @@ namespace MarketPlace.Application.Services.Implementations
         #region dispose
         public async ValueTask DisposeAsync()
         {
-            await _contactUsRepository.DisposeAsync();
+            if (_contactUsRepository != null) await _contactUsRepository.DisposeAsync();
+            if (_ticketMessageRepository != null) await _ticketMessageRepository.DisposeAsync();
+            if (_ticketRepository != null) await _ticketRepository.DisposeAsync();
         }
         #endregion
     }

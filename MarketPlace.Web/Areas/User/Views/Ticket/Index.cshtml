@@ -1,7 +1,68 @@
-﻿
+﻿@model MarketPlace.DataLayer.DTOs.Contact.FilterTicketDTO
 @{
     ViewData["Title"] = "Index";
 }
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a asp-area="User" asp-controller="Home" asp-action="Dashboard">خانه</a></li>
+                        <li>@ViewData["Title"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h1>Index</h1>
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    @await Component.InvokeAsync("UserSidebar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade active show" id="account-details">
+                            <h3>@ViewData["Title"] </h3>
+                            @if (Model.Tickets != null && Model.Tickets.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>کد تیکت</th>
+                                                <th>عنوان</th>
+                                                <th>وضعیت</th>
+                                                <th>جزییات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var ticket in Model.Tickets)
+                                            {
+                                                <tr>
+                                                    <td>@ticket.Id</td>
+                                                    <td>@ticket.Title</td>
+                                                    <td>______</td>
+                                                    <td><a href="#" class="view">نمایش جزیات</a></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <partial name="_NotItemFound" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 

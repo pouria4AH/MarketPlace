@@ -10,7 +10,7 @@ namespace MarketPlace.DataLayer.DTOs.Paging
     {
         public static BasePaging Build(int pageId, int allEntitiesCount, int take, int howManyPageAfterAndBefore)
         {
-            var pageCount = Convert.ToInt32(Math.Floor(allEntitiesCount / (double)take));
+            var pageCount = Convert.ToInt32(Math.Ceiling(allEntitiesCount / (double)take));
             return new BasePaging
             {
                 PageId = pageId,
