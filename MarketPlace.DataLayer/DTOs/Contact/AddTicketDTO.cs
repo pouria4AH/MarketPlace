@@ -3,7 +3,7 @@ using MarketPlace.DataLayer.Entities.Contact;
 
 namespace MarketPlace.DataLayer.DTOs.Contact
 {
-    public class AddTicketViewModel
+    public class AddTicketDTO
     {
         [Display(Name = "عنوان")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

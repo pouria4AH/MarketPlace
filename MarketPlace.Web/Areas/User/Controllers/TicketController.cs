@@ -35,7 +35,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
         }
 
         [HttpPost("add-Ticket"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTicket(AddTicketViewModel ticket)
+        public async Task<IActionResult> AddTicket(AddTicketDTO ticket)
         {
             if (ModelState.IsValid)
             {
@@ -53,6 +53,17 @@ namespace MarketPlace.Web.Areas.User.Controllers
                 }
             }
             return View(ticket);
+        }
+
+        #endregion
+
+        #region show Ticket detalis
+        [HttpGet("tickets/{ticketId}")]
+        public async Task<IActionResult> TicketDetail(long ticketId)
+        {
+            var ticket = await _contactService.GetTicketForShow(ticketId, User.GetUserId());
+            if (ticket == null) return NotFound();
+            return View();
         }
 
         #endregion

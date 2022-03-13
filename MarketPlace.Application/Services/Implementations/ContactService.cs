@@ -43,7 +43,7 @@ namespace MarketPlace.Application.Services.Implementations
         #endregion
         #region Ticket
 
-        public async Task<AddTicketResult> AddUserTicket(AddTicketViewModel ticket, long userId)
+        public async Task<AddTicketResult> AddUserTicket(AddTicketDTO ticket, long userId)
         {
             if (string.IsNullOrEmpty(ticket.Text)) return AddTicketResult.Error;
 
@@ -112,7 +112,6 @@ namespace MarketPlace.Application.Services.Implementations
                 query = query.Where(x => EF.Functions.Like(x.Title, $"%{filter.Title}%"));
 
             #endregion
-
             #region paging
 
             var ticketCount = await query.CountAsync();
@@ -121,6 +120,20 @@ namespace MarketPlace.Application.Services.Implementations
 
             #endregion
             return filter.SetPaging(pager).SetTicket(allEntities);
+        }
+
+        public async Task<TicketDetailDTO> GetTicketForShow(long ticketId, long userId)
+        {
+            var ticket = await _ticketRepository.GetQuery().AsQueryable()
+                .Include(x => x.Owner)
+                .SingleOrDefaultAsync(x => x.Id == ticketId);
+            if (ticket == null || ticket.OwnerId != userId) return null;
+            return new TicketDetailDTO
+            {
+                Ticket = ticket,
+                TicketMessage = await _ticketMessageRepository.GetQuery().AsQueryable()
+                    .Where(x => x.TicketId == ticketId && !x.IsDelete).ToListAsync()
+            };
         }
 
         #endregion

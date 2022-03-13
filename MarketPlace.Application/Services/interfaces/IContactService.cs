@@ -12,8 +12,9 @@ namespace MarketPlace.Application.Services.interfaces
 
         #region Ticket
 
-        Task<AddTicketResult> AddUserTicket(AddTicketViewModel ticket, long userId);
+        Task<AddTicketResult> AddUserTicket(AddTicketDTO ticket, long userId);
         Task<FilterTicketDTO> FilterTickets(FilterTicketDTO filter);
+        Task<TicketDetailDTO> GetTicketForShow(long ticketId, long userId);
 
         #endregion
 
