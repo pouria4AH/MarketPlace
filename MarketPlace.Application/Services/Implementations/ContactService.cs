@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Contact;
+using MarketPlace.DataLayer.DTOs.Paging;
 using MarketPlace.DataLayer.Entities.Contact;
 using MarketPlace.DataLayer.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -99,7 +100,6 @@ namespace MarketPlace.Application.Services.Implementations
                     break;
             }
             #endregion
-
             #region filter
 
             if (filter.FilterTicketState != null)
@@ -112,7 +112,16 @@ namespace MarketPlace.Application.Services.Implementations
                 query = query.Where(x => EF.Functions.Like(x.Title, $"%{filter.Title}%"));
 
             #endregion
-            return filter;
+
+            #region paging
+
+            var ticketCount = await query.CountAsync();
+            var pager = Pager.Build(filter.PageId, filter.AllEntitiesCount, filter.TakeEntities,
+                filter.HowManyShowPageAfterAndBefore);
+            var allEntities = await query.paging(pager).ToListAsync();
+            
+            #endregion
+            return filter.SetPaging(pager).SetTicket(allEntities);
         }
 
         #endregion
