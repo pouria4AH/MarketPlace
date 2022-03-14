@@ -37,7 +37,7 @@
                     <div class="tab-content dashboard_content">
                         <div class="tab-pane fade active show" id="account-details">
                             <h3>@ViewData["Title"] </h3>
-                            <partial name="AnswerTicketPartial" model="new AnswerTicketDTO{Id = Model.Ticket.Id}" />
+                            <partial name="_AnswerTicketPartial" model="new AnswerTicketDTO{Id = Model.Ticket.Id}" />
                             <br />
                             <ul class="messages" id="messages">
                                 @if (Model.TicketMessage != null && Model.TicketMessage.Any())
