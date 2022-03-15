@@ -38,6 +38,7 @@ namespace MarketPlace.Web
             services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
             services.AddScoped<ISmsService, SmsService>();
             services.AddScoped<IContactService, ContactService>();
+            services.AddScoped<ISellerService, SellerService>();
             #endregion
 
             #region config database
@@ -47,7 +48,7 @@ namespace MarketPlace.Web
             });
             #endregion
 
-            #region MyRegion
+            #region Authenticate
 
             services.AddAuthentication(options =>
             {

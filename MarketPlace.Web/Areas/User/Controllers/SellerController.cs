@@ -24,7 +24,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
         {
             return View();
         }
-        [HttpPost("request-seller-panel")]
+        [HttpPost("request-seller-panel"),ValidateAntiForgeryToken]
         public async Task<IActionResult> RequestSellerPanel(RequestSellerDTO seller)
         {
             var res = await _sellerService.AddNewSellerRequest(seller, User.GetUserId());

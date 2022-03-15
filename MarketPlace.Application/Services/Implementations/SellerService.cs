@@ -30,9 +30,11 @@ namespace MarketPlace.Application.Services.Implementations
         {
             var user = await _useRepository.GetEntityById(userId);
             if (user.IsBlocked) return RequestSellerResult.HasNotPermission;
-            var hasInprogress = await _sellerRepository.GetQuery().AsQueryable().AllAsync(x =>
+
+            var hasInprogress = await _sellerRepository.GetQuery().AsQueryable().AnyAsync(x =>
                 x.UserId == userId && x.SellerAcceptanceState == SellerAcceptanceState.UnderProgress);
             if (hasInprogress) return RequestSellerResult.HasUnderProgressRequest;
+
             var newSeller = new Seller
             {
                 UserId = userId,

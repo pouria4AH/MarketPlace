@@ -1,8 +1,11 @@
-﻿
+﻿@model MarketPlace.DataLayer.DTOs.Seller.RequestSellerDTO
 @{
-    ViewData["Title"] = "RequestSellerPanel";
+    ViewData["Title"] = "درخواست فروشگاه";
 }
 
+@section script{
+    <partial name="_jqueryValidatord" />
+}
 <div class="breadcrumbs_area">
     <div class="container">
         <div class="row">
@@ -17,7 +20,6 @@
         </div>
     </div>
 </div>
-
 <section class="main_content_area">
     <div class="container">
         <div class="account_dashboard">
@@ -26,10 +28,36 @@
                     @await Component.InvokeAsync("UserSidebar")
                 </div>
                 <div class="col-sm-12 col-md-9 col-lg-9">
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade active show" id="account-details">
+                            <h3>@ViewData["Title"] </h3>
+                            <div class="login">
+                                <div class="login_form_container">
+                                    <div class="account_login_form">
+                                        <form asp-area="User" asp-controller="Seller" asp-action="RequestSellerPanel"  method="post">
+                                            <br>
+                                            <label> نام فروشگاه</label>
+                                            <input type="text" asp-for="StoreName">
+                                            <span class="text-danger" asp-validation-for="StoreName"></span>
+                                            <br />
+                                            <label> تلفن</label>
+                                            <input type="text" asp-for="Phone">
+                                            <span class="text-danger" asp-validation-for="Phone"></span>
+                                            <br />
+                                            <label> آدرس</label>
+                                            <textarea class="form-control" rows="12" asp-for="Address"></textarea>
+                                            <span class="text-danger" asp-validation-for="Address"></span>
+                                            <div class="save_button primary_btn default_button">
+                                                <button type="submit">ذخیره</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-
