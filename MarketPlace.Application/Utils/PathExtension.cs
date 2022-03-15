@@ -10,6 +10,13 @@ namespace MarketPlace.Application.Utils
         #region slider
         public static string SlideOrigin = "/img/slider/";
         #endregion
+
+        #region uploder
+
+        public static string UploadeImage = "/img/upload/";
+        public static string UploadeImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/upload/");
+
+        #endregion
         #region user avatar
         public static string UserAvatarOrigin = "/Content/Images/UserAvatar/origin/";
         public static string UserAvatarOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/UserAvatar/origin/");

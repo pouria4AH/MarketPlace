@@ -136,6 +136,25 @@ namespace MarketPlace.Application.Services.Implementations
             };
         }
 
+        public async Task<AnswerTicketResult> AnswerTicket(AnswerTicketDTO answer, long userId)
+        {
+            var ticket = await _ticketRepository.GetEntityById(answer.Id);
+            if (ticket == null) return AnswerTicketResult.NotFound;
+            if (ticket.OwnerId != userId) return AnswerTicketResult.NotFourUser;
+            var tiketMessage = new TicketMessage
+            {
+                 TicketId = ticket.Id,
+                 SenderId = userId,
+                 Text = answer.Text
+            };
+            await _ticketMessageRepository.AddEntity(tiketMessage);
+            await _ticketMessageRepository.SaveChanges();
+            ticket.IsReadByaAdmin = false;
+            ticket.IsReadByOwner = true;
+            await _ticketRepository.SaveChanges();
+            return AnswerTicketResult.Success;
+        }
+
         #endregion
         #region dispose
         public async ValueTask DisposeAsync()
