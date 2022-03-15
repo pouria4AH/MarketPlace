@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayer.Entities.Common;
 using MarketPlace.DataLayer.Entities.Contact;
+using MarketPlace.DataLayer.Entities.Store;
 
 namespace MarketPlace.DataLayer.Entities.Account
 {
@@ -61,6 +62,7 @@ namespace MarketPlace.DataLayer.Entities.Account
         public ICollection<ContactUs> ContactUses { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
         public ICollection<TicketMessage> TicketMessages { get; set; }
+        public ICollection<Seller> Sellers { get; set; }
         #endregion
     }
 }
