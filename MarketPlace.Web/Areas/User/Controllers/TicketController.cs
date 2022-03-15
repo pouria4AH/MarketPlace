@@ -78,7 +78,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #region answer ticket
 
-        [HttpPost("answer-ticket")]
+        [HttpPost("answer-ticket"),ValidateAntiForgeryToken]
         public async Task<IActionResult> AnswerTicket(AnswerTicketDTO answer)
         {
             if (string.IsNullOrEmpty(answer.Text))
