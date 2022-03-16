@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
+using MarketPlace.DataLayer.DTOs.Paging;
 using MarketPlace.DataLayer.DTOs.Seller;
 using MarketPlace.DataLayer.Entities.Account;
 using MarketPlace.DataLayer.Entities.Store;
@@ -48,6 +49,53 @@ namespace MarketPlace.Application.Services.Implementations
             return RequestSellerResult.Success;
         }
 
+        public async Task<FilterSellerDTO> FilterSellers(FilterSellerDTO filter)
+        {
+            var query = _sellerRepository.GetQuery()
+                .Include(x => x.User).AsQueryable();
+
+            #region state
+
+            switch (filter.State)
+            {
+                case FilterSellerState.All:
+                    query = query.Where(x => !x.IsDelete);
+                    break;
+                case FilterSellerState.Accepted:
+                    query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.Accepted && !x.IsDelete);
+                    break;
+                case FilterSellerState.Rejected:
+                    query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.Rejected && !x.IsDelete);
+                    break;
+                case FilterSellerState.UnderProgress:
+                    query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.UnderProgress && !x.IsDelete);
+                    break;
+            }
+            #endregion
+
+            #region filter
+
+            if (filter.UserId != null && filter.UserId != 0)
+                query = query.Where(x => x.UserId == filter.UserId);
+            if (!string.IsNullOrEmpty(filter.StoreName))
+                query = query.Where(x => EF.Functions.Like(x.StoreName, $"%{filter.StoreName}%"));
+            if (!string.IsNullOrEmpty(filter.Phone))
+                query = query.Where(x => EF.Functions.Like(x.Phone, $"%{filter.Phone}%"));
+            if (!string.IsNullOrEmpty(filter.Address))
+                query = query.Where(x => EF.Functions.Like(x.Address, $"%{filter.Address}%"));
+
+            #endregion
+            #region paging
+
+            //query = query.OrderByDescending(x => x.Id);
+            var ticketCount = await query.CountAsync();
+            var pager = Pager.Build(filter.PageId, ticketCount, filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
+            var allEntities = await query.Paging(pager).ToListAsync();
+
+            #endregion
+
+            return filter.SetPaging(pager).SetSeller(allEntities);
+        }
 
         #endregion
 

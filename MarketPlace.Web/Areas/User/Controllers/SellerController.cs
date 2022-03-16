@@ -19,7 +19,9 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #endregion
 
-        [HttpGet("request-seller-panel")]
+        #region request
+
+         [HttpGet("request-seller-panel")]
         public IActionResult RequestSellerPanel()
         {
             return View();
@@ -42,11 +44,24 @@ namespace MarketPlace.Web.Areas.User.Controllers
                     case RequestSellerResult.Success:
                         TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
                         TempData[InfoMessage] = "درخواست در حال برسی است";
-                        // todo: show list
+                        return RedirectToAction("SellerRequests");
                         break;
                 }
             }
             return View(seller);
         }
+
+        #endregion
+
+        #region request list
+        [HttpGet("seller-requests")]
+        public async Task<IActionResult> SellerRequests(FilterSellerDTO filter)
+        {
+            filter.TakeEntities = 5;
+            filter.UserId = User.GetUserId();
+            filter.State = FilterSellerState.All;
+            return View(await _sellerService.FilterSellers(filter));
+        }
+        #endregion
     }
 }
