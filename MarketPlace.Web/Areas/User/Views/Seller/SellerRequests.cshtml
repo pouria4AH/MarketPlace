@@ -1,4 +1,5 @@
-﻿@model MarketPlace.DataLayer.DTOs.Seller.FilterSellerDTO
+﻿@using MarketPlace.Application.Extensions
+@model MarketPlace.DataLayer.DTOs.Seller.FilterSellerDTO
 @{
     ViewData["Title"] = "درخواست ها";
 }
@@ -38,7 +39,7 @@
                                                 <th>شناسه</th>
                                                 <th>نام فروشگاه</th>
                                                 <th>تلفن </th>
-                                                <th>تلفن همراه</th>
+                                                <th>وضعیت</th>
                                                 <th>دستورات</th>س
                                             </tr>
                                         </thead>
@@ -49,8 +50,8 @@
                                                     <td>@seller.Id</td>
                                                     <td>@seller.StoreName</td>
                                                     <td>@seller.Phone</td>
-                                                    <td>@seller.Mobile</td>
-                                                    <td><a>ویرایش</a></td>
+                                                    <td>@seller.SellerAcceptanceState.GetEnumName()</td>
+                                                    <td><a asp-area="User" asp-controller="Seller" asp-action="EditRequestSeller" asp-route-id="@seller.Id">ویرایش</a></td>
                                                 </tr>
                                             }
                                         </tbody>

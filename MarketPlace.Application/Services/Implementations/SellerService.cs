@@ -97,6 +97,32 @@ namespace MarketPlace.Application.Services.Implementations
             return filter.SetPaging(pager).SetSeller(allEntities);
         }
 
+        public async Task<EditRequestSellerDTO> GetRequestSellerForEdit(long id, long currentUserId)
+        {
+            var seller = await _sellerRepository.GetEntityById(id);
+            if (seller == null || seller.UserId != currentUserId) return null;
+            return new EditRequestSellerDTO
+            {
+                Id = seller.Id,
+                Address = seller.Address,
+                Phone = seller.Phone,
+                StoreName = seller.StoreName
+            };
+        }
+
+        public async Task<EditRequestResult> EditRequsetSeller(EditRequestSellerDTO request, long currentId)
+        {
+            var seller = await _sellerRepository.GetEntityById(request.Id);
+            if (seller == null || seller.UserId != currentId) return EditRequestResult.NotFound;
+            seller.Phone = request.Phone;
+            seller.StoreName = request.StoreName;
+            seller.Address = request.Address;
+            seller.SellerAcceptanceState = SellerAcceptanceState.UnderProgress;
+            _sellerRepository.EditEntity(seller);
+            await _sellerRepository.SaveChanges();
+            return EditRequestResult.Success;
+        }
+
         #endregion
 
 

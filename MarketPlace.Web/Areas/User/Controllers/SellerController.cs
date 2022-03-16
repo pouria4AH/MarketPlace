@@ -21,12 +21,12 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #region request
 
-         [HttpGet("request-seller-panel")]
+        [HttpGet("request-seller-panel")]
         public IActionResult RequestSellerPanel()
         {
             return View();
         }
-        [HttpPost("request-seller-panel"),ValidateAntiForgeryToken]
+        [HttpPost("request-seller-panel"), ValidateAntiForgeryToken]
         public async Task<IActionResult> RequestSellerPanel(RequestSellerDTO seller)
         {
             var res = await _sellerService.AddNewSellerRequest(seller, User.GetUserId());
@@ -53,7 +53,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #endregion
 
-        #region request list
+        #region Sellers request 
         [HttpGet("seller-requests")]
         public async Task<IActionResult> SellerRequests(FilterSellerDTO filter)
         {
@@ -62,6 +62,38 @@ namespace MarketPlace.Web.Areas.User.Controllers
             filter.State = FilterSellerState.All;
             return View(await _sellerService.FilterSellers(filter));
         }
+        #endregion
+
+
+        #region edit request
+
+        [HttpGet("edit-request-seller/{id}")]
+        public async Task<IActionResult> EditRequestSeller(long id)
+        {
+            var requestSeller = await _sellerService.GetRequestSellerForEdit(id, User.GetUserId());
+            if (requestSeller == null) return NotFound();
+            return View(requestSeller);
+        }
+        [HttpPost("edit-request-seller/{id}")]
+        public async Task<IActionResult> EditRequestSeller(EditRequestSellerDTO request)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _sellerService.EditRequsetSeller(request, User.GetUserId());
+                switch (res)
+                {
+                    case EditRequestResult.NotFound:
+                        TempData[ErrorMessage] = "اطلاعات مورد نظر یافت نشد";
+                        break;
+                    case EditRequestResult.Success:
+                        TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
+                        TempData[WarningMessage] = "درخواست در حال برسی است";
+                        return RedirectToAction("SellerRequests");
+                }
+            }
+            return View(request);
+        }
+
         #endregion
     }
 }
