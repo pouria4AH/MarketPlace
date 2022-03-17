@@ -115,7 +115,7 @@ namespace MarketPlace.Application.Services.Implementations
 
             var ticketCount = await query.CountAsync();
             var pager = Pager.Build(filter.PageId, ticketCount, filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
-            var allEntities = await query.Paging(pager).ToListAsync();
+            var allEntities =  query.Paging(pager).ToList();
 
             #endregion
             return filter.SetPaging(pager).SetTicket(allEntities);

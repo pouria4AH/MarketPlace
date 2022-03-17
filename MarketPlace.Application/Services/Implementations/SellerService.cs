@@ -51,49 +51,100 @@ namespace MarketPlace.Application.Services.Implementations
 
         public async Task<FilterSellerDTO> FilterSellers(FilterSellerDTO filter)
         {
+            #region comment old code
+
+
+            //var query = _sellerRepository.GetQuery()
+            //               .Include(x => x.User).AsQueryable();
+
+            //           #region state
+
+            //           switch (filter.State)
+            //           {
+            //               case FilterSellerState.All:
+            //                   query = query.Where(x => !x.IsDelete);
+            //                   break;
+            //               case FilterSellerState.Accepted:
+            //                   query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.Accepted && !x.IsDelete);
+            //                   break;
+            //               case FilterSellerState.Rejected:
+            //                   query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.Rejected && !x.IsDelete);
+            //                   break;
+            //               case FilterSellerState.UnderProgress:
+            //                   query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.UnderProgress && !x.IsDelete);
+            //                   break;
+            //           }
+            //           #endregion
+
+            //           #region filter
+
+            //           if (filter.UserId != null && filter.UserId != 0)
+            //               query = query.Where(x => x.UserId == filter.UserId);
+            //           if (!string.IsNullOrEmpty(filter.StoreName))
+            //               query = query.Where(x => EF.Functions.Like(x.StoreName, $"%{filter.StoreName}%"));
+            //           if (!string.IsNullOrEmpty(filter.Phone))
+            //               query = query.Where(x => EF.Functions.Like(x.Phone, $"%{filter.Phone}%"));
+            //           if (!string.IsNullOrEmpty(filter.Address))
+            //               query = query.Where(x => EF.Functions.Like(x.Address, $"%{filter.Address}%"));
+
+            //           #endregion
+            //           #region paging
+
+            //           //query = query.OrderByDescending(x => x.Id);
+            //           var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
+            //           var allEntities = await query.Paging(pager).ToListAsync();
+            //           #endregion
+
+            //           return filter.SetPaging(pager).SetSeller(allEntities);
+            #endregion
             var query = _sellerRepository.GetQuery()
-                .Include(x => x.User).AsQueryable();
+                 .Include(s => s.User)
+                 .AsQueryable();
 
             #region state
 
             switch (filter.State)
             {
                 case FilterSellerState.All:
-                    query = query.Where(x => !x.IsDelete);
+                    query = query.Where(s => !s.IsDelete);
                     break;
                 case FilterSellerState.Accepted:
-                    query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.Accepted && !x.IsDelete);
+                    query = query.Where(s => s.SellerAcceptanceState == SellerAcceptanceState.Accepted && !s.IsDelete);
+                    break;
+
+                case FilterSellerState.UnderProgress:
+                    query = query.Where(s => s.SellerAcceptanceState == SellerAcceptanceState.UnderProgress && !s.IsDelete);
                     break;
                 case FilterSellerState.Rejected:
-                    query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.Rejected && !x.IsDelete);
-                    break;
-                case FilterSellerState.UnderProgress:
-                    query = query.Where(x => x.SellerAcceptanceState == SellerAcceptanceState.UnderProgress && !x.IsDelete);
+                    query = query.Where(s => s.SellerAcceptanceState == SellerAcceptanceState.Rejected && !s.IsDelete);
                     break;
             }
+
             #endregion
 
             #region filter
 
             if (filter.UserId != null && filter.UserId != 0)
-                query = query.Where(x => x.UserId == filter.UserId);
+                query = query.Where(s => s.UserId == filter.UserId);
+
             if (!string.IsNullOrEmpty(filter.StoreName))
-                query = query.Where(x => EF.Functions.Like(x.StoreName, $"%{filter.StoreName}%"));
+                query = query.Where(s => EF.Functions.Like(s.StoreName, $"%{filter.StoreName}%"));
+
             if (!string.IsNullOrEmpty(filter.Phone))
-                query = query.Where(x => EF.Functions.Like(x.Phone, $"%{filter.Phone}%"));
+                query = query.Where(s => EF.Functions.Like(s.Phone, $"%{filter.Phone}%"));
+
+            if (!string.IsNullOrEmpty(filter.Mobile))
+                query = query.Where(s => EF.Functions.Like(s.Mobile, $"%{filter.Mobile}%"));
+
             if (!string.IsNullOrEmpty(filter.Address))
-                query = query.Where(x => EF.Functions.Like(x.Address, $"%{filter.Address}%"));
+                query = query.Where(s => EF.Functions.Like(s.Address, $"%{filter.Address}%"));
 
             #endregion
+
             #region paging
-
-            //query = query.OrderByDescending(x => x.Id);
-            var ticketCount = await query.CountAsync();
-            var pager = Pager.Build(filter.PageId, ticketCount, filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
+            var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
             var allEntities = await query.Paging(pager).ToListAsync();
-
             #endregion
-
             return filter.SetPaging(pager).SetSeller(allEntities);
         }
 

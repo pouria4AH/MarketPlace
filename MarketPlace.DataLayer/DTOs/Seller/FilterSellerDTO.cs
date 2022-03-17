@@ -10,6 +10,7 @@ namespace MarketPlace.DataLayer.DTOs.Seller
         public string StoreName { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
+        public string Mobile { get; set; }
         public List<Entities.Store.Seller> Sellers { get; set; }
         public FilterSellerState State { get; set; }
         #region methods

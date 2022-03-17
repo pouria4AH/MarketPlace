@@ -1,0 +1,15 @@
+﻿@model MarketPlace.DataLayer.DTOs.Paging.BasePaging
+<ul class="pagination">
+    @if (Model.StartPage < Model.PageId)
+    {
+        <li><a class="cursor-pointer" onclick="FillPageId(@Model.PageId - 1)">«</a></li>
+    }
+    @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+    {
+        <li class="@(Model.PageId == i ? "active" : "") cursor-pointer"><a onclick="FillPageId(@i)">@i</a></li>
+    }
+    @if (Model.EndPage > Model.PageId)
+    {
+        <li><a class="cursor-pointer" onclick="FillPageId(@Model.PageId + 1)">»</a></li>
+    }
+</ul>

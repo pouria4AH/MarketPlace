@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarketPlace.DataLayer.DTOs.Paging
 {
@@ -17,7 +13,7 @@ namespace MarketPlace.DataLayer.DTOs.Paging
                 AllEntitiesCount = allEntitiesCount,
                 TakeEntities = take,
                 HowManyShowPageAfterAndBefore = howManyPageAfterAndBefore,
-                SkipEntities = (pageCount - 1) * take,
+                SkipEntities = (pageId - 1) * take,
                 StartPage = pageId - howManyPageAfterAndBefore <= 0 ? 1 : pageId - howManyPageAfterAndBefore,
                 EndPage = pageId + howManyPageAfterAndBefore > pageCount ? pageCount : pageId + howManyPageAfterAndBefore,
                 PageCount = pageCount

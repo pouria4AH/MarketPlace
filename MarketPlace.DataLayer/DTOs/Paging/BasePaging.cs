@@ -16,5 +16,10 @@
         public int TakeEntities { get; set; }
         public int SkipEntities { get; set; }
         public int HowManyShowPageAfterAndBefore { get; set; }
+
+        public BasePaging GetCurrentPaging()
+        {
+            return this;
+        }
     }
 }

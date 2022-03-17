@@ -21,6 +21,7 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> SellerRequests(FilterSellerDTO filter)
         {
+            filter.TakeEntities = 1;
             return View(await _sellerService.FilterSellers(filter));
         }
 
