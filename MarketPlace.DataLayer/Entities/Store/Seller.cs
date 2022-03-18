@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayer.Entities.Account;
 using MarketPlace.DataLayer.Entities.Common;
+using MarketPlace.DataLayer.Entities.Products;
 
 namespace MarketPlace.DataLayer.Entities.Store
 {
