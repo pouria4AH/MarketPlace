@@ -1,0 +1,7 @@
+﻿@model MarketPlace.DataLayer.Common.RejectItemDTO
+<div class="form-group">
+    <input type="hidden" asp-for="Id"/>
+    <label for="definpu">متن مورد نظر خود را وارد کنید</label>
+    <textarea asp-for="RejectDescription" class="form-control" rows="10"></textarea>
+    <span class="text-danger" asp-validation-for="RejectDescription"></span>
+</div>

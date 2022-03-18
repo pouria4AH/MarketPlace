@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
+using MarketPlace.DataLayer.Common;
 using MarketPlace.DataLayer.DTOs.Seller;
 using MarketPlace.Web.Http;
 
@@ -43,7 +44,21 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
                 "اطلاعات مورد نظر یافت نشد",
                 null);
         }
-
-        #endregion
+        public async Task<IActionResult> RejectSellerRequests(RejectItemDTO reject)
+        {
+            var result = await _sellerService.RejectSellerRequests(reject);
+            if (result)
+            {
+                return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success,
+                    "در خواست شما با موفقیت ثبت شد",
+                    reject);
+            }
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
+                "اطلاعات مورد نظر یافت نشد",
+                null);
+        }
     }
+
+    #endregion
 }
+

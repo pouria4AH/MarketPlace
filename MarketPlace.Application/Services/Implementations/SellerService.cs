@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
+using MarketPlace.DataLayer.Common;
 using MarketPlace.DataLayer.DTOs.Paging;
 using MarketPlace.DataLayer.DTOs.Seller;
 using MarketPlace.DataLayer.Entities.Account;
@@ -180,10 +181,26 @@ namespace MarketPlace.Application.Services.Implementations
             if (seller != null)
             {
                 seller.SellerAcceptanceState = SellerAcceptanceState.Accepted;
+                seller.SellerAcceptanceStateDescription = "اطلاعات پنل شما تایید شد";
                 _sellerRepository.EditEntity(seller);
                 await _sellerRepository.SaveChanges();
                 return true;
             }
+            return false;
+        }
+
+        public async Task<bool> RejectSellerRequests(RejectItemDTO reject)
+        {
+            var seller = await _sellerRepository.GetEntityById(reject.Id);
+            if (seller != null)
+            {
+                seller.SellerAcceptanceState = SellerAcceptanceState.Rejected;
+                seller.SellerAcceptanceStateDescription = reject.RejectDescription;
+                _sellerRepository.EditEntity(seller);
+                await _sellerRepository.SaveChanges();
+                return true;
+            }
+
             return false;
         }
 
