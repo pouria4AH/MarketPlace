@@ -161,7 +161,7 @@ namespace MarketPlace.Application.Services.Implementations
             };
         }
 
-        public async Task<EditRequestResult> EditRequsetSeller(EditRequestSellerDTO request, long currentId)
+        public async Task<EditRequestResult> EditRequestsSeller(EditRequestSellerDTO request, long currentId)
         {
             var seller = await _sellerRepository.GetEntityById(request.Id);
             if (seller == null || seller.UserId != currentId) return EditRequestResult.NotFound;
@@ -172,6 +172,19 @@ namespace MarketPlace.Application.Services.Implementations
             _sellerRepository.EditEntity(seller);
             await _sellerRepository.SaveChanges();
             return EditRequestResult.Success;
+        }
+
+        public async Task<bool> AcceptSellerRequests(long requestsId)
+        {
+            var seller = await _sellerRepository.GetEntityById(requestsId);
+            if (seller != null)
+            {
+                seller.SellerAcceptanceState = SellerAcceptanceState.Accepted;
+                _sellerRepository.EditEntity(seller);
+                await _sellerRepository.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         #endregion

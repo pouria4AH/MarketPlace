@@ -1,5 +1,6 @@
 ﻿@using MarketPlace.Application.Extensions
 @using MarketPlace.DataLayer.DTOs.Seller
+@using MarketPlace.DataLayer.Entities.Store
 @model MarketPlace.DataLayer.DTOs.Seller.FilterSellerDTO
 @{
     ViewData["Title"] = "در خواست های فروشندگی";
@@ -10,7 +11,7 @@
             فیلتر
         </div>
         <form method="get" asp-area="Admin" asp-controller="Seller" asp-action="SellerRequests" id="filter-form">
-            <input type="hidden" asp-for="PageId"  />
+            <input type="hidden" asp-for="PageId" />
             <div class="form-group">
                 <label>نام فروشگاه</label>
                 <input class="form-control" asp-for="StoreName">
@@ -76,7 +77,7 @@
                     @foreach (var seller in Model.Sellers)
                     {
 
-                        <tr>
+                        <tr id="ajax-url-item-@seller.Id">
                             <td>
                                 @seller.Id
                             </td>
@@ -90,7 +91,10 @@
                                 @seller.SellerAcceptanceState.GetEnumName();
                             </td>
                             <td class="danger">
-                                danger
+                                @if (seller.SellerAcceptanceState != SellerAcceptanceState.Accepted)
+                                {
+                                    <a class="btn btn-success" ajax-url-button="@seller.Id" asp-area="Admin" asp-controller="Seller" asp-action="AcceptSellerRequests" asp-route-requestsId="@seller.Id">تایید اطلاعات</a>
+                                }
                             </td>
                         </tr>
                     }

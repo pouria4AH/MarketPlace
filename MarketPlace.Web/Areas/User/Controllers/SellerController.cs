@@ -79,7 +79,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
         {
             if (ModelState.IsValid)
             {
-                var res = await _sellerService.EditRequsetSeller(request, User.GetUserId());
+                var res = await _sellerService.EditRequestsSeller(request, User.GetUserId());
                 switch (res)
                 {
                     case EditRequestResult.NotFound:
