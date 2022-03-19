@@ -1,14 +1,75 @@
-﻿@model MarketPlace.DataLayer.DTOs.Product.FilterProductDTO
+﻿@using MarketPlace.Application.Extensions
+@using MarketPlace.Application.Utils
+@model MarketPlace.DataLayer.DTOs.Product.FilterProductDTO
 @{
-    ViewData["Title"] = "محصول";
+    ViewData["Title"] = " مدریت محصول";
 }
 
-@if (Model.Products !=null && Model.Products.Any())
-{
-    <ul>
-        @foreach (var product in Model.Products)
-        {
-            <li>@product.Title</li>
-        }
-    </ul>
-}
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a asp-area="User" asp-controller="Home" asp-action="Dashboard">خانه</a></li>
+                        <li>@ViewData["Title"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    @await Component.InvokeAsync("SellerSidebar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade active show" id="account-details">
+                            <h3>@ViewData["Title"] </h3>
+                            @if (Model.Products != null && Model.Products.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>عکس</th>
+                                                <th>عنوان</th>
+                                                <th>وضعیت</th>
+                                                <th>جزییات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var product in Model.Products)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <img src="@(PathExtension.UserProductThumb + product.ImageName)"/>
+                                                    </td>
+                                                    <td>@product.Title</td>
+                                                    <td>
+                                                        @product.ProductAcceptanceState.GetEnumName()
+                                                    </td>
+                                                    <td><a asp-area="" asp-controller="" asp-action="" asp-route-ticketId="@product.Id">نمایش جزیات</a></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <partial name="_NotItemFound" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -35,20 +35,23 @@ namespace MarketPlace.Application.Services.Implementations
 
             switch (filter.FilterProductState)
             {
+                case FilterProductState.All:
+                    query = query.Where(x => !x.IsDelete);
+                    break;
                 case FilterProductState.Active:
-                    query = query.Where(x => x.IsActive && x.ProductAcceptanceState == ProductAcceptanceState.Accept);
+                    query = query.Where(x => x.IsActive && x.ProductAcceptanceState == ProductAcceptanceState.Accept && !x.IsDelete);
                     break;
                 case FilterProductState.NotActive:
-                    query = query.Where(x => !x.IsActive && x.ProductAcceptanceState == ProductAcceptanceState.Accept);
+                    query = query.Where(x => !x.IsActive && x.ProductAcceptanceState == ProductAcceptanceState.Accept && !x.IsDelete);
                     break;
                 case FilterProductState.Reject:
-                    query = query.Where(x => x.ProductAcceptanceState == ProductAcceptanceState.Reject);
+                    query = query.Where(x => x.ProductAcceptanceState == ProductAcceptanceState.Reject && !x.IsDelete);
                     break;
                 case FilterProductState.Accept:
-                    query = query.Where(x => x.ProductAcceptanceState == ProductAcceptanceState.Accept);
+                    query = query.Where(x => x.ProductAcceptanceState == ProductAcceptanceState.Accept && !x.IsDelete);
                     break;
                 case FilterProductState.UnderProcess:
-                    query = query.Where(x => x.ProductAcceptanceState == ProductAcceptanceState.UnderProcess);
+                    query = query.Where(x => x.ProductAcceptanceState == ProductAcceptanceState.UnderProcess && !x.IsDelete);
                     break;
             }
 

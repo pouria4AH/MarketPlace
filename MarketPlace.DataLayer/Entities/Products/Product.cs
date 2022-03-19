@@ -6,7 +6,8 @@ using MarketPlace.DataLayer.Entities.Store;
 
 namespace MarketPlace.DataLayer.Entities.Products
 {
-    public class Product :BaseEntity    {
+    public class Product : BaseEntity
+    {
         #region prop
         public long SellerId { get; set; }
         [Display(Name = "نام محصول")]
@@ -46,8 +47,11 @@ namespace MarketPlace.DataLayer.Entities.Products
 
     public enum ProductAcceptanceState
     {
+        [Display(Name = "در حال برسی")]
         UnderProcess,
+        [Display(Name = "تایید شده")]
         Accept,
+        [Display(Name = "رد شده")]
         Reject
     }
 }

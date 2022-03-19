@@ -47,6 +47,7 @@ namespace MarketPlace.DataLayer.DTOs.Product
         Accept,
         Reject,
         Active,
-        NotActive
+        NotActive,
+        All
     }
 }
