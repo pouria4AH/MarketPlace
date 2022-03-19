@@ -9,12 +9,14 @@ namespace MarketPlace.Application.Services.interfaces
     public interface IProductService : IAsyncDisposable
     {
         #region product
-        Task<FilterProductDTO> FilterProducts(FilterProductDTO filter);
+        Task<FilterProductDTO> FilterProducts(FilterProductDTO filter); 
+        Task<CreateProductState> CreateProduct(CreateProductDTO product, string imageName, long sellerId);
         #endregion
 
         #region ProductCategories
 
         Task<List<ProductCategory>> GetAllProductCategoryBy(long? parentId);
+        Task<List<ProductCategory>> GetAllActiveProductCategories();
 
         #endregion
 

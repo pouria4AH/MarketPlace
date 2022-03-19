@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Product;
 using MarketPlace.Web.PresentationExtensions;
+using Microsoft.AspNetCore.Http;
 
 namespace MarketPlace.Web.Areas.Seller.Controllers
 {
@@ -37,18 +38,19 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         [HttpGet("create-product")]
         public async Task<IActionResult> CreateProduct()
         {
-            ViewBag.MainCategory = await _productService.GetAllProductCategoryBy(null);
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
             return View();
         }
 
         [HttpPost("create-product"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProduct(CreateProductDTO product)
+        public async Task<IActionResult> CreateProduct(CreateProductDTO product, IFormFile productImag)
         {
             if (ModelState.IsValid)
             {
 
             }
-            ViewBag.MainCategory = await _productService.GetAllProductCategoryBy(null);
+
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
             return View(product);
         }
         #endregion

@@ -73,17 +73,43 @@ namespace MarketPlace.Application.Services.Implementations
 
             return filter.SetProduct(allEntities).SetPaging(pager);
         }
+
+        public async Task<CreateProductState> CreateProduct(CreateProductDTO product, string imageName, long sellerId)
+        {
+            var newProduct = new Product
+            {
+                Title = product.Title,
+                Description = product.Description,
+                ShortDescription = product.ShortDescription,
+                Price = product.Price,
+                IsActive = product.IsActive,
+                ImageName = imageName,
+                SellerId = sellerId
+            };
+            await _productRepository.AddEntity(newProduct);
+            await _productRepository.SaveChanges();
+            return CreateProductState.Success;
+        }
         #endregion
         #region ProductCategories
 
         public async Task<List<ProductCategory>> GetAllProductCategoryBy(long? parentId)
         {
-            if (parentId ==null || parentId == 0)
+            if (parentId == null || parentId == 0)
             {
-                return await _productCategory.GetQuery().AsQueryable().ToListAsync();
+                return await _productCategory.GetQuery().AsQueryable()
+                    .Where(x=>!x.IsDelete && x.IsActive && x.ParentId == null)
+                    .ToListAsync();
             }
 
-            return await _productCategory.GetQuery().AsQueryable().Where(x => x.ParentId == parentId).ToListAsync();
+            return await _productCategory.GetQuery().AsQueryable()
+                .Where(x => !x.IsDelete && x.IsActive && x.ParentId == parentId).ToListAsync();
+        }
+
+        public async Task<List<ProductCategory>> GetAllActiveProductCategories()
+        {
+            return await _productCategory.GetQuery().AsQueryable()
+                .Where(x => !x.IsDelete && x.IsActive).ToListAsync();
         }
 
         #endregion
