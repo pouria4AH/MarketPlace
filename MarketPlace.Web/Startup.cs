@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using GoogleReCaptcha.V3;
@@ -13,6 +14,7 @@ using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.Context;
 using MarketPlace.DataLayer.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Web
@@ -65,6 +67,13 @@ namespace MarketPlace.Web
 
             #endregion
 
+            #region data proteion
+
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auto\\"))
+                .SetApplicationName("MarketPlace")
+                .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
+            #endregion
             #region html encoder
 
             services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[]

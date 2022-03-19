@@ -50,7 +50,6 @@
         </form>
     </div>
 </div>
-
 <div class="col-xs-8">
     <div class="well with-header with-footer">
         <div class="header bordered-sky">
@@ -60,55 +59,56 @@
         {
             <table class="table table-bordered table-hover">
                 <thead>
-                    <tr>
-                        <th>
-                            شناسه
-                        </th>
-                        <th>
-                            اسم
-                        </th>
-                        <th>
-                            تلفن
-                        </th>
-                        <th>
-                            وضعیت
-                        </th>
-                        <th>
-                            عملیات
-                        </th>
-                    </tr>
+                <tr>
+                    <th>
+                        شناسه
+                    </th>
+                    <th>
+                        اسم
+                    </th>
+                    <th>
+                        تلفن
+                    </th>
+                    <th>
+                        وضعیت
+                    </th>
+                    <th>
+                        عملیات
+                    </th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var seller in Model.Sellers)
-                    {
+                @foreach (var seller in Model.Sellers)
+                {
 
-                        <tr id="ajax-url-item-@seller.Id">
-                            <td>
-                                @seller.Id
-                            </td>
-                            <td>
-                                @seller.StoreName
-                            </td>
-                            <td>
-                                @seller.Phone
-                            </td>
-                            <td>
-                                @seller.SellerAcceptanceState.GetEnumName();
-                            </td>
-                            <td class="danger">
-                                @if (seller.SellerAcceptanceState != SellerAcceptanceState.Accepted)
-                                {
-                                    <a class="btn btn-success" ajax-url-button="@seller.Id" asp-area="Admin" asp-controller="Seller" asp-action="AcceptSellerRequests" asp-route-requestsId="@seller.Id">تایید اطلاعات</a>
-                                }
-                                @if (seller.SellerAcceptanceState != SellerAcceptanceState.Rejected)
-                                {
-                                    <a class="btn btn-danger" data-toggle="modal" data-target=".reject-modal-@seller.Id">رد اطلاعات</a>
-                                }
-                            </td>
-                        </tr>
-                    }
+                    <tr id="ajax-url-item-@seller.Id">
+                        <td>
+                            @seller.Id
+                        </td>
+                        <td>
+                            @seller.StoreName
+                        </td>
+                        <td>
+                            @seller.Phone
+                        </td>
+                        <td>
+                            @seller.SellerAcceptanceState.GetEnumName();
+                        </td>
+                        <td class="danger">
+                            @if (seller.SellerAcceptanceState != SellerAcceptanceState.Accepted)
+                            {
+                                <a class="btn btn-success" ajax-url-button="@seller.Id" asp-area="Admin" asp-controller="Seller" asp-action="AcceptSellerRequests" asp-route-requestsId="@seller.Id">تایید اطلاعات</a>
+                            }
+                            @if (seller.SellerAcceptanceState != SellerAcceptanceState.Rejected)
+                            {
+                                <a class="btn btn-danger" data-toggle="modal" data-target=".reject-modal-@seller.Id">رد اطلاعات</a>
+                            }
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
+           
         }
         else
         {

@@ -57,7 +57,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
         [HttpGet("seller-requests")]
         public async Task<IActionResult> SellerRequests(FilterSellerDTO filter)
         {
-            filter.TakeEntities = 5;
+            filter.TakeEntities = 1;
             filter.UserId = User.GetUserId();
             filter.State = FilterSellerState.All;
             return View(await _sellerService.FilterSellers(filter));

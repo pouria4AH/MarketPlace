@@ -29,34 +29,42 @@
                 <div class="col-sm-12 col-md-9 col-lg-9">
                     <div class="tab-content dashboard_content">
                         <div class="tab-pane fade active show" id="account-details">
+                            <form asp-area="User" asp-controller="Seller" asp-action="SellerRequests" method="get" id="filter-form">
+                                <input type="hidden" asp-for="PageId" />
+                                <input type="hidden" asp-for="Mobile" />
+                                <input type="hidden" asp-for="Address" />
+                                <input type="hidden" asp-for="Phone" />
+                            </form>
                             <h3>@ViewData["Title"] </h3>
                             @if (Model.Sellers != null && Model.Sellers.Any())
                             {
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
-                                            <tr>
-                                                <th>شناسه</th>
-                                                <th>نام فروشگاه</th>
-                                                <th>تلفن </th>
-                                                <th>وضعیت</th>
-                                                <th>دستورات</th>س
-                                            </tr>
+                                        <tr>
+                                            <th>شناسه</th>
+                                            <th>نام فروشگاه</th>
+                                            <th>تلفن </th>
+                                            <th>وضعیت</th>
+                                            <th>دستورات</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var seller in Model.Sellers)
-                                            {
-                                                <tr>
-                                                    <td>@seller.Id</td>
-                                                    <td>@seller.StoreName</td>
-                                                    <td>@seller.Phone</td>
-                                                    <td>@seller.SellerAcceptanceState.GetEnumName()</td>
-                                                    <td><a asp-area="User" asp-controller="Seller" asp-action="EditRequestSeller" asp-route-id="@seller.Id">ویرایش</a></td>
-                                                </tr>
-                                            }
+                                        @foreach (var seller in Model.Sellers)
+                                        {
+                                            <tr>
+                                                <td>@seller.Id</td>
+                                                <td>@seller.StoreName</td>
+                                                <td>@seller.Phone</td>
+                                                <td>@seller.SellerAcceptanceState.GetEnumName()</td>
+                                                <td><a asp-area="User" asp-controller="Seller" asp-action="EditRequestSeller" asp-route-id="@seller.Id">ویرایش</a></td>
+                                            </tr>
+                                        }
                                         </tbody>
                                     </table>
+                                    <partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />
                                 </div>
+                                
                             }
                             else
                             {
