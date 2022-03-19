@@ -115,7 +115,7 @@ namespace MarketPlace.Application.Services.Implementations
 
             var ticketCount = await query.CountAsync();
             var pager = Pager.Build(filter.PageId, ticketCount, filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
-            var allEntities =  query.Paging(pager).ToList();
+            var allEntities = await query.Paging(pager).ToListAsync();
 
             #endregion
             return filter.SetPaging(pager).SetTicket(allEntities);
@@ -142,9 +142,9 @@ namespace MarketPlace.Application.Services.Implementations
             if (ticket.OwnerId != userId) return AnswerTicketResult.NotFourUser;
             var tiketMessage = new TicketMessage
             {
-                 TicketId = ticket.Id,
-                 SenderId = userId,
-                 Text = answer.Text
+                TicketId = ticket.Id,
+                SenderId = userId,
+                Text = answer.Text
             };
             await _ticketMessageRepository.AddEntity(tiketMessage);
             await _ticketMessageRepository.SaveChanges();

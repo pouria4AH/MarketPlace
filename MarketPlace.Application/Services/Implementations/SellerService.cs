@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.Common;
@@ -202,6 +203,13 @@ namespace MarketPlace.Application.Services.Implementations
             }
 
             return false;
+        }
+
+        public async Task<Seller> GetLastActiveSellerByUser(long userId)
+        {
+           return await _sellerRepository.GetQuery().OrderByDescending(x => x.CreateDate)
+                .FirstOrDefaultAsync(
+                    x => x.UserId == userId && x.SellerAcceptanceState == SellerAcceptanceState.Accepted && !x.IsDelete);
         }
 
         #endregion

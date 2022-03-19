@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MarketPlace.DataLayer.Common;
 using MarketPlace.DataLayer.DTOs.Seller;
+using MarketPlace.DataLayer.Entities.Store;
 
 namespace MarketPlace.Application.Services.interfaces
 {
@@ -13,5 +14,6 @@ namespace MarketPlace.Application.Services.interfaces
         Task<EditRequestResult> EditRequestsSeller(EditRequestSellerDTO request, long currentId);
         Task<bool> AcceptSellerRequests(long requesetId);
         Task<bool> RejectSellerRequests(RejectItemDTO reject);
+        Task<Seller> GetLastActiveSellerByUser(long userId);
     }
 }

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.interfaces;
+using MarketPlace.DataLayer.DTOs.Product;
+using MarketPlace.Web.PresentationExtensions;
 
 namespace MarketPlace.Web.Areas.Seller.Controllers
 {
@@ -8,17 +11,27 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         #region ctor
 
         private readonly IProductService _productService;
-
-        public ProductController(IProductService productService)
+        private readonly ISellerService _sellerService;
+        public ProductController(IProductService productService, ISellerService sellerService)
         {
             _productService = productService;
+            _sellerService = sellerService;
         }
 
         #endregion
-        //[HttpGet("")]
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+
+        #region list
+
+        [HttpGet("products")]
+        public async Task<IActionResult> Index(FilterProductDTO filter)
+        {
+            var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
+            filter.SellerId = seller.Id;
+            filter.FilterProductState = FilterProductState.Accept;
+            return View(await _productService.FilterProducts(filter));
+        }
+
+        #endregion
+        
     }
 }
