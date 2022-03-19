@@ -32,6 +32,25 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         }
 
         #endregion
-        
+
+        #region create product
+        [HttpGet("create-product")]
+        public async Task<IActionResult> CreateProduct()
+        {
+            ViewBag.MainCategory = await _productService.GetAllProductCategoryBy(null);
+            return View();
+        }
+
+        [HttpPost("create-product"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProduct(CreateProductDTO product)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+            ViewBag.MainCategory = await _productService.GetAllProductCategoryBy(null);
+            return View(product);
+        }
+        #endregion
     }
 }

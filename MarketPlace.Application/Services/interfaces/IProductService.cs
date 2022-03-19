@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarketPlace.DataLayer.DTOs.Product;
+using MarketPlace.DataLayer.Entities.Products;
 
 namespace MarketPlace.Application.Services.interfaces
 {
@@ -8,6 +10,12 @@ namespace MarketPlace.Application.Services.interfaces
     {
         #region product
         Task<FilterProductDTO> FilterProducts(FilterProductDTO filter);
+        #endregion
+
+        #region ProductCategories
+
+        Task<List<ProductCategory>> GetAllProductCategoryBy(long? parentId);
+
         #endregion
 
     }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using MarketPlace.DataLayer.Entities.Common;
 using MarketPlace.DataLayer.Entities.Store;
 
@@ -25,7 +24,6 @@ namespace MarketPlace.DataLayer.Entities.Products
         public int Price { get; set; }
         [Display(Name = "توضیحات کوتاه")]
         [MaxLength(230, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string ShortDescription { get; set; }
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -40,6 +38,7 @@ namespace MarketPlace.DataLayer.Entities.Products
         #region relation
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+        public ICollection<ProductColors> ProductColorses { get; set; }
         public Seller Seller { get; set; }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Paging;
@@ -73,7 +74,19 @@ namespace MarketPlace.Application.Services.Implementations
             return filter.SetProduct(allEntities).SetPaging(pager);
         }
         #endregion
+        #region ProductCategories
 
+        public async Task<List<ProductCategory>> GetAllProductCategoryBy(long? parentId)
+        {
+            if (parentId ==null || parentId == 0)
+            {
+                return await _productCategory.GetQuery().AsQueryable().ToListAsync();
+            }
+
+            return await _productCategory.GetQuery().AsQueryable().Where(x => x.ParentId == parentId).ToListAsync();
+        }
+
+        #endregion
         #region dispose
         public async ValueTask DisposeAsync()
         {
