@@ -23,7 +23,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
         #region list
 
-        [HttpGet("products")]
+        [HttpGet("products-list")]
         public async Task<IActionResult> Index(FilterProductDTO filter)
         {
             var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());

@@ -43,14 +43,19 @@ namespace MarketPlace.Web
             services.AddScoped<ISellerService, SellerService>();
             services.AddScoped<IProductService, ProductService>();
             #endregion
+            #region data proteion
 
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auth\\"))
+                .SetApplicationName("MarketPlaceProject")
+                .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
+            #endregion
             #region config database
             services.AddDbContext<MarketPlaceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MarketPlaceConnection"));
             });
             #endregion
-
             #region Authenticate
 
             services.AddAuthentication(options =>
@@ -65,14 +70,6 @@ namespace MarketPlace.Web
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(43200);
             });
 
-            #endregion
-
-            #region data proteion
-
-            services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auto\\"))
-                .SetApplicationName("MarketPlace")
-                .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
             #endregion
             #region html encoder
 

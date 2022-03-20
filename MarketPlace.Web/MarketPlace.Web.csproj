@@ -23,6 +23,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Folder Include="wwwroot\Auth\" />
 	  <Folder Include="wwwroot\Content\Images\UserAvatar\" />
 	</ItemGroup>
 
