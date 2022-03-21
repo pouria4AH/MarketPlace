@@ -26,11 +26,11 @@ namespace MarketPlace.Application.Utils
 
         #endregion
         #region user product
-        public static string UserProductOrigin = "/Content/Images/Product/origin/";
-        public static string UserProductOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/Product/origin/");
+        public static string ProductOrigin = "/Content/Images/Product/origin/";
+        public static string ProductOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/Product/origin/");
 
-        public static string UserProductThumb = "/Content/Images/Product/Thumb/";
-        public static string UserProductThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/Product/Thumb/");
+        public static string ProductThumb = "/Content/Images/Product/Thumb/";
+        public static string ProductThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/Product/Thumb/");
 
         #endregion
 

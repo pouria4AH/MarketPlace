@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.interfaces;
@@ -44,12 +45,31 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         }
 
         [HttpPost("create-product"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProduct(CreateProductDTO product, IFormFile productImag)
+        public async Task<IActionResult> CreateProduct(CreateProductDTO product, IFormFile productImage)
         {
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => new { x.Key, x.Value.Errors })
+                .ToArray();
+            
 
             if (ModelState.IsValid)
             {
+                var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
 
+                var res = await _productService.CreateProduct(product, seller.Id, productImage);
+                switch (res)
+                {
+                    case CreateProductResult.IsNotImage:
+                        TempData[WarningMessage] = "لطفا عکس را وارد کنبد";
+                        break;
+                    case CreateProductResult.Error:
+                        TempData[ErrorMessage] = "عملیات با خطا مواجه شد";
+                        break;
+                    case CreateProductResult.Success:
+                        TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
+                        return RedirectToAction("Index");
+                }
             }
 
             ViewBag.Categories = await _productService.GetAllActiveProductCategories();

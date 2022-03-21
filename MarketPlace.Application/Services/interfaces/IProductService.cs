@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarketPlace.DataLayer.DTOs.Product;
 using MarketPlace.DataLayer.Entities.Products;
+using Microsoft.AspNetCore.Http;
 
 namespace MarketPlace.Application.Services.interfaces
 {
@@ -10,7 +11,7 @@ namespace MarketPlace.Application.Services.interfaces
     {
         #region product
         Task<FilterProductDTO> FilterProducts(FilterProductDTO filter); 
-        Task<CreateProductState> CreateProduct(CreateProductDTO product, string imageName, long sellerId);
+        Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId, IFormFile productImage);
         #endregion
 
         #region ProductCategories

@@ -1,7 +1,7 @@
 ﻿@using MarketPlace.DataLayer.Entities.Products
 @model MarketPlace.DataLayer.DTOs.Product.CreateProductDTO
 @{
-    ViewData["Title"] = "CreateProduct";
+    ViewData["Title"] = "ایجاد محصول";
     var categories = ViewBag.Categories as List<ProductCategory>;
 }
 
@@ -37,11 +37,11 @@
                                         <form asp-area="Seller" asp-controller="Product" asp-action="CreateProduct" enctype="multipart/form-data" id="create_product_form">
                                             <br>
                                             <label> نام محصول</label>
-                                            <input type="text" asp-for="Title">
+                                            <input asp-for="Title">
                                             <span class="text-danger" asp-validation-for="Title"></span>
                                             <br />
                                             <label> قیمت محصول </label>
-                                            <input type="text" asp-for="Price">
+                                            <input asp-for="Price">
                                             <span class="text-danger" asp-validation-for="Price"></span>
                                             <br />
                                             <label> توضیحات کوتاه</label>
@@ -57,7 +57,7 @@
                                             </label>
                                             <br />
                                             <div class="col-md-9">
-                                                <input type="file" name="productImag" accept=".png,.jpeg" />
+                                                <input type="file" name="productImage" accept=".png,.jpeg" />
                                             </div>
                                             @if (categories != null && categories.Any())
                                             {
@@ -185,7 +185,7 @@
                 if (colorName != '' && colorPrice != '') {
                     var currentColorsCount = $('#list_of_product_colors tr');
                     var index = currentColorsCount.length;
-                    var colorNameNode = `<input type="hidden" value="${colorName}"  name="ProductColors [${index}].ColorName" coler-name-hidden-index="${index}">`;
+                    var colorNameNode = `<input type="hidden" value="${colorName}"  name="ProductColors[${index}].ColorName" coler-name-hidden-index="${index}" >`;
                     var colorPriceNode = `<input type="hidden" value="${colorPrice}"  name="ProductColors[${index}].Price"  coler-price-hidden-index="${index}" >`;
                     $('#create_product_form').append(colorNameNode);
                     $('#create_product_form').append(colorPriceNode);

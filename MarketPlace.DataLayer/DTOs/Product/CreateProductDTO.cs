@@ -12,11 +12,14 @@ namespace MarketPlace.DataLayer.DTOs.Product
         public string Title { get; set; }
         [Display(Name = "فعال / غبر فعال")]
         public bool IsActive { get; set; }
+
         [Display(Name = "قیمت محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public int Price { get; set; }
+
         [Display(Name = "توضیحات کوتاه")]
         [MaxLength(230, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string ShortDescription { get; set; }
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -26,9 +29,10 @@ namespace MarketPlace.DataLayer.DTOs.Product
         public List<long> SelectedCategories { get; set; }
     }
 
-    public enum CreateProductState
+    public enum CreateProductResult
     {
         Success,
-        Error
+        Error,
+        IsNotImage
     }
 }

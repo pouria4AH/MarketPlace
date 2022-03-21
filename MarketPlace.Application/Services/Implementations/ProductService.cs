@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MarketPlace.Application.Extensions;
 using MarketPlace.Application.Services.interfaces;
+using MarketPlace.Application.Utils;
 using MarketPlace.DataLayer.DTOs.Paging;
 using MarketPlace.DataLayer.DTOs.Product;
 using MarketPlace.DataLayer.Entities.Products;
 using MarketPlace.DataLayer.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Application.Services.Implementations
@@ -17,12 +22,14 @@ namespace MarketPlace.Application.Services.Implementations
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<ProductCategory> _productCategory;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedRepository;
+        private readonly IGenericRepository<ProductColors> _productColorRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategory, IGenericRepository<ProductSelectedCategory> productSelectedRepository)
+        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategory, IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColors> productColorRepository)
         {
             _productRepository = productRepository;
             _productCategory = productCategory;
             _productSelectedRepository = productSelectedRepository;
+            _productColorRepository = productColorRepository;
         }
 
         #endregion
@@ -74,21 +81,64 @@ namespace MarketPlace.Application.Services.Implementations
             return filter.SetProduct(allEntities).SetPaging(pager);
         }
 
-        public async Task<CreateProductState> CreateProduct(CreateProductDTO product, string imageName, long sellerId)
+        public async Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId, IFormFile productImage)
         {
-            var newProduct = new Product
+            if (productImage == null) return CreateProductResult.IsNotImage;
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productImage.FileName);
+            var res = productImage.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                PathExtension.ProductThumbServer);
+            if (res)
             {
-                Title = product.Title,
-                Description = product.Description,
-                ShortDescription = product.ShortDescription,
-                Price = product.Price,
-                IsActive = product.IsActive,
-                ImageName = imageName,
-                SellerId = sellerId
-            };
-            await _productRepository.AddEntity(newProduct);
-            await _productRepository.SaveChanges();
-            return CreateProductState.Success;
+                var newProduct = new Product
+                {
+                    Title = product.Title,
+                    Description = product.Description,
+                    ShortDescription = product.ShortDescription,
+                    Price = product.Price,
+                    IsActive = product.IsActive,
+                    SellerId = sellerId,
+                    ImageName = imageName
+                };
+                await _productRepository.AddEntity(newProduct);
+                await _productRepository.SaveChanges();
+
+                var productSelectedCategories = new List<ProductSelectedCategory>();
+                if (product.SelectedCategories !=null && product.SelectedCategories.Any())
+                {
+                    foreach (var categoryId in product.SelectedCategories)
+                    {
+                        productSelectedCategories.Add(new ProductSelectedCategory
+                        {
+                            ProductId = newProduct.Id,
+                            ProductCategoryId = categoryId
+                        });
+                    }
+
+                    await _productSelectedRepository.AddRangeEntities(productSelectedCategories);
+                    await _productSelectedRepository.SaveChanges();
+                }
+
+                if (product.ProductColors != null && product.ProductColors.Any())
+                {
+                    var productSelectedColor = new List<ProductColors>();
+                    foreach (var color in product.ProductColors)
+                    {
+                        productSelectedColor.Add(new ProductColors
+                        {
+                            ColorName = color.ColorName,
+                            Price = color.Price,
+                            ProductId = newProduct.Id
+                        });
+                    }
+
+                    await _productColorRepository.AddRangeEntities(productSelectedColor);
+                    await _productColorRepository.SaveChanges();
+                }
+
+                return CreateProductResult.Success;
+            }
+
+            return CreateProductResult.Error;
         }
         #endregion
         #region ProductCategories
@@ -98,7 +148,7 @@ namespace MarketPlace.Application.Services.Implementations
             if (parentId == null || parentId == 0)
             {
                 return await _productCategory.GetQuery().AsQueryable()
-                    .Where(x=>!x.IsDelete && x.IsActive && x.ParentId == null)
+                    .Where(x => !x.IsDelete && x.IsActive && x.ParentId == null)
                     .ToListAsync();
             }
 
@@ -119,6 +169,7 @@ namespace MarketPlace.Application.Services.Implementations
             await _productSelectedRepository.DisposeAsync();
             await _productRepository.DisposeAsync();
             await _productCategory.DisposeAsync();
+            await _productColorRepository.DisposeAsync();
         }
         #endregion
 
