@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Product;
@@ -45,6 +46,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         [HttpPost("create-product"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(CreateProductDTO product, IFormFile productImag)
         {
+
             if (ModelState.IsValid)
             {
 

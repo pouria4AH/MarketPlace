@@ -11,7 +11,7 @@ namespace MarketPlace.DataLayer.Entities.Products
     public class ProductColors : BaseEntity
     {
         public long ProductId { get; set; }
-        [Display(Name = "")]
+        [Display(Name = "رنگ")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string ColorName { get; set; }

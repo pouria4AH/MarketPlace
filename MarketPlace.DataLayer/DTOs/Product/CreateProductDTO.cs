@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MarketPlace.DataLayer.Entities.Products;
 
 namespace MarketPlace.DataLayer.DTOs.Product
 {
@@ -21,7 +22,7 @@ namespace MarketPlace.DataLayer.DTOs.Product
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Description { get; set; }
 
-        public List<CreateProductColorDTO> ProductColors { get; set; }
+        public List<ProductColors> ProductColors { get; set; }
         public List<long> SelectedCategories { get; set; }
     }
 
