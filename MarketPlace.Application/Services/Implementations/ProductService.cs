@@ -172,6 +172,26 @@ namespace MarketPlace.Application.Services.Implementations
             return false;
         }
 
+        public async Task<EditProductDTO> GetProductForEdit(long productId)
+        {
+            var product = await _productRepository.GetEntityById(productId);
+            if (product == null) return null;
+            return new EditProductDTO
+            {
+                 Id = productId,
+                 Price = product.Price,
+                 Description = product.Description,
+                 ShortDescription = product.ShortDescription,
+                 IsActive = product.IsActive,
+                 Title = product.Title,
+                 ProductColors = await _productColorRepository.GetQuery().AsQueryable()
+                     .Where(x=>x.ProductId == productId && !x.IsDelete)
+                     .Select(x=> new CreateProductColorDTO{ Price =x.Price, ColorName = x.ColorName}).ToListAsync(),
+                 SelectedCategories = await _productSelectedRepository.GetQuery().AsQueryable()
+                     .Where(x=>x.ProductId == productId).Select(x=>x.ProductCategoryId).ToListAsync()
+            };
+        }
+
         #endregion
         #region ProductCategories
 

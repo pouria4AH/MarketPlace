@@ -104,3 +104,44 @@ function OnSuccessRejectItem(res) {
         $('.close').click();
     }
 }
+
+$("[main_category_checkbox]").on('change',
+    function (e) {
+        var isChecked = $(this).is(':checked');
+        var selectedCategoryId = $(this).attr('main_category_checkbox');
+        console.log(selectedCategoryId);
+        if (isChecked) {
+            $('#sub_categories_' + selectedCategoryId).slideDown(300);
+        } else {
+            $('#sub_categories_' + selectedCategoryId).slideUp(300);
+            $('[parent-category-id="' + selectedCategoryId + '"]').prop('checked', false);
+        }
+    });
+$('#add_color_button').on('click',
+    function (e) {
+        e.preventDefault();
+        var colorName = $('#product_color_name_input').val();
+        var colorPrice = $('#product_color_price_input').val();
+        if (colorName != '' && colorPrice != '') {
+            var currentColorsCount = $('#list_of_product_colors tr');
+            var index = currentColorsCount.length;
+            var colorNameNode = `<input type="hidden" value="${colorName}"  name="ProductColors[${index}].ColorName" coler-name-hidden-index="${colorName}-${colorPrice}" >`;
+            var colorPriceNode = `<input type="hidden" value="${colorPrice}"  name="ProductColors[${index}].Price"  coler-price-hidden-index="${colorName}-${colorPrice}" >`;
+            $('#create_product_form').append(colorNameNode);
+            $('#create_product_form').append(colorPriceNode);
+
+            var colorTableNode = `<tr coler-item-item="${colorName}-${colorPrice}"> <td> ${colorName} </td>  <td> ${colorPrice} </td>  <td> <a class="btn btn-danger" onclick="removeProductColer('${colorName}-${colorPrice}')" >حذف</a> </td>  </tr>`;
+            $('#list_of_product_colors').append(colorTableNode);
+
+            $('#product_color_name_input').val('');
+            $('#product_color_price_input').val('');
+        } else {
+            ShowMessage("اخطار", "اطفا رنگ را درست وارد کنید", "warning")
+        }
+    });
+
+function removeProductColer(index2) {
+    $('[coler-item-item="' + index2 + '"]').remove();
+    $('[coler-name-hidden-index="' + index2 + '"]').remove();
+    $('[coler-price-hidden-index="' + index2 + '"]').remove();
+}

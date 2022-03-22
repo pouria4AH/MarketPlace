@@ -1,5 +1,6 @@
 ﻿@using MarketPlace.Application.Extensions
 @using MarketPlace.Application.Utils
+@using MarketPlace.DataLayer.Entities.Products
 @model MarketPlace.DataLayer.DTOs.Product.FilterProductDTO
 @{
     ViewData["Title"] = " مدریت محصول";
@@ -53,6 +54,15 @@
                                                     <td>@product.Title</td>
                                                     <td>
                                                         @product.ProductAcceptanceState.GetEnumName()
+                                                        @if (product.ProductAcceptanceState == ProductAcceptanceState.Reject)
+                                                        {
+                                                            <br/>
+                                                            <div class="text-danger">
+                                                                <p>
+                                                                    @Html.Raw(product.ProductAcceptOrRejectDescription);
+                                                                </p>
+                                                            </div>
+                                                        }
                                                     </td>
                                                     <td><a asp-area="" asp-controller="" asp-action="" asp-route-ticketId="@product.Id">نمایش جزیات</a></td>
                                                 </tr>

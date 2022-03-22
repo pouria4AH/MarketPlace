@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.interfaces;
@@ -47,11 +46,11 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         [HttpPost("create-product"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(CreateProductDTO product, IFormFile productImage)
         {
-            var errors = ModelState
-                .Where(x => x.Value.Errors.Count > 0)
-                .Select(x => new { x.Key, x.Value.Errors })
-                .ToArray();
-            
+            //var errors = ModelState
+            //    .Where(x => x.Value.Errors.Count > 0)
+            //    .Select(x => new { x.Key, x.Value.Errors })
+            //    .ToArray();
+
 
             if (ModelState.IsValid)
             {
@@ -72,6 +71,17 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
                 }
             }
 
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
+            return View(product);
+        }
+        #endregion
+
+        #region edit product
+        [HttpGet("edit-product/{productId}")]
+        public async Task<IActionResult> EditProduct(long productId)
+        {
+            var product = await _productService.GetProductForEdit(productId);
+            if (product == null) return NotFound();
             ViewBag.Categories = await _productService.GetAllActiveProductCategories();
             return View(product);
         }
