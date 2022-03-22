@@ -163,10 +163,10 @@
     </div>
 </section>
 @section script{
-    <partial name="_jqueryValidatord" />
+    <partial name="_jqueryValidatord"/>
     <script>
         $("[main_category_checkbox]").on('change',
-            function (e) {
+            function(e) {
                 var isChecked = $(this).is(':checked');
                 var selectedCategoryId = $(this).attr('main_category_checkbox');
                 console.log(selectedCategoryId);
@@ -178,19 +178,19 @@
                 }
             });
         $('#add_color_button').on('click',
-            function (e) {
+            function(e) {
                 e.preventDefault();
                 var colorName = $('#product_color_name_input').val();
                 var colorPrice = $('#product_color_price_input').val();
                 if (colorName != '' && colorPrice != '') {
                     var currentColorsCount = $('#list_of_product_colors tr');
                     var index = currentColorsCount.length;
-                    var colorNameNode = `<input type="hidden" value="${colorName}"  name="ProductColors[${index}].ColorName" coler-name-hidden-index="${index}" >`;
-                    var colorPriceNode = `<input type="hidden" value="${colorPrice}"  name="ProductColors[${index}].Price"  coler-price-hidden-index="${index}" >`;
+                    var colorNameNode = `<input type="hidden" value="${colorName}"  name="ProductColors[${index}].ColorName" coler-name-hidden-index="${colorName}-${colorPrice}" >`;
+                    var colorPriceNode = `<input type="hidden" value="${colorPrice}"  name="ProductColors[${index}].Price"  coler-price-hidden-index="${colorName}-${colorPrice}" >`;
                     $('#create_product_form').append(colorNameNode);
                     $('#create_product_form').append(colorPriceNode);
 
-                    var colorTableNode = `<tr coler-item-item="${index}"> <td> ${colorName} </td>  <td> ${colorPrice} </td>  <td> <a class="btn btn-danger" onclick="removeProductColer(${index})" >حذف</a> </td>  </tr>`;
+                    var colorTableNode = `<tr coler-item-item="${colorName}-${colorPrice}"> <td> ${colorName} </td>  <td> ${colorPrice} </td>  <td> <a class="btn btn-danger" onclick="removeProductColer('${colorName}-${colorPrice}')" >حذف</a> </td>  </tr>`;
                     $('#list_of_product_colors').append(colorTableNode);
 
                     $('#product_color_name_input').val('');
@@ -200,10 +200,10 @@
                 }
             });
 
-        function removeProductColer(index) {
-            $('[coler-item-item="' + index + '"]').remove();
-            $('[coler-name-hidden-index="' + index + '"]').remove();
-            $('[coler-price-hidden-index="' + index + '"]').remove();
+        function removeProductColer(index2) {
+            $('[coler-item-item="' + index2 + '"]').remove();
+            $('[coler-name-hidden-index="' + index2 + '"]').remove();
+            $('[coler-price-hidden-index="' + index2 + '"]').remove();
         }
 
     </script>
