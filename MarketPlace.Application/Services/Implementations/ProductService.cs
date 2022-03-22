@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MarketPlace.Application.Extensions;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.Application.Utils;
+using MarketPlace.DataLayer.Common;
 using MarketPlace.DataLayer.DTOs.Paging;
 using MarketPlace.DataLayer.DTOs.Product;
 using MarketPlace.DataLayer.Entities.Products;
@@ -104,7 +105,7 @@ namespace MarketPlace.Application.Services.Implementations
                 await _productRepository.SaveChanges();
 
                 var productSelectedCategories = new List<ProductSelectedCategory>();
-                if (product.SelectedCategories !=null && product.SelectedCategories.Any())
+                if (product.SelectedCategories != null && product.SelectedCategories.Any())
                 {
                     foreach (var categoryId in product.SelectedCategories)
                     {
@@ -141,6 +142,36 @@ namespace MarketPlace.Application.Services.Implementations
 
             return CreateProductResult.Error;
         }
+
+        public async Task<bool> AcceptedSellerProduct(long id)
+        {
+            var product = await _productRepository.GetEntityById(id);
+            if (product != null)
+            {
+                product.ProductAcceptanceState = ProductAcceptanceState.Accept;
+                product.ProductAcceptOrRejectDescription = $" این محصول در تاریخ {DateTime.Now.ToShamsi()} تایید شد";
+                _productRepository.EditEntity(product);
+                await _productRepository.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> RejectSellerProduct(RejectItemDTO reject)
+        {
+            var product = await _productRepository.GetEntityById(reject.Id);
+            if (product != null)
+            {
+                product.ProductAcceptanceState = ProductAcceptanceState.Reject;
+                product.ProductAcceptOrRejectDescription = reject.RejectDescription;
+                _productRepository.EditEntity(product);
+                await _productRepository.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
         #endregion
         #region ProductCategories
 
