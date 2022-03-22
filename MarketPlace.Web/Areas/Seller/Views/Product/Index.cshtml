@@ -49,14 +49,14 @@
                                             {
                                                 <tr>
                                                     <td>
-                                                        <img src="@(PathExtension.ProductThumb + product.ImageName)"/>
+                                                        <img src="@(PathExtension.ProductThumb + product.ImageName)" />
                                                     </td>
                                                     <td>@product.Title</td>
                                                     <td>
-                                                        @product.ProductAcceptanceState.GetEnumName()
+                                                        @product.ProductAcceptanceState.GetEnumName() / @(product.IsActive ? "فعال" : "غیر فعال")
                                                         @if (product.ProductAcceptanceState == ProductAcceptanceState.Reject)
                                                         {
-                                                            <br/>
+                                                            <br />
                                                             <div class="text-danger">
                                                                 <p>
                                                                     @Html.Raw(product.ProductAcceptOrRejectDescription);
@@ -64,7 +64,7 @@
                                                             </div>
                                                         }
                                                     </td>
-                                                    <td><a asp-area="" asp-controller="" asp-action="" asp-route-ticketId="@product.Id">نمایش جزیات</a></td>
+                                                    <td><a asp-area="Seller" asp-controller="Product" asp-action="EditProduct" asp-route-productId="@product.Id">ویرایش</a></td>
                                                 </tr>
                                             }
                                         </tbody>

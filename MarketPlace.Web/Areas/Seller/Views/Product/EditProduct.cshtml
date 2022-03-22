@@ -1,4 +1,5 @@
 ﻿@using MarketPlace.DataLayer.Entities.Products
+@using MarketPlace.Application.Utils
 @model MarketPlace.DataLayer.DTOs.Product.EditProductDTO
 @{
     ViewData["Title"] = "EditProduct";
@@ -34,7 +35,18 @@
                                 <div class="login_form_container">
                                     <div class="account_login_form">
                                         <form asp-area="Seller" asp-controller="Product" asp-action="EditProduct" enctype="multipart/form-data" id="create_product_form">
-                                          <input type="hidden" asp-for="Id"/>
+                                            <input type="hidden" asp-for="Id" />
+                                            <input type="hidden" asp-for="ImageName" />
+                                            @if (Model.ProductColors != null && Model.ProductColors.Any())
+                                            {
+                                                var index = 0;
+                                                foreach (var color in Model.ProductColors)
+                                                {
+                                                    <input type="hidden" value="@color.ColorName" name="ProductColors[@index].ColorName" coler-name-hidden-index="@color.ColorName-@color.Price">
+                                                    <input type="hidden" value="@color.Price" name="ProductColors[@index].Price" coler-price-hidden-index="@color.ColorName-@color.Price">
+                                                    index += 1;
+                                                }
+                                            }
                                             <br>
                                             <label> نام محصول</label>
                                             <input asp-for="Title">
@@ -53,9 +65,10 @@
                                             <span class="text-danger" asp-validation-for="Description"></span>
                                             <br />
                                             <label>
-                                                <input type="checkbox" name="@nameof(Model.IsActive)" value="true" /> فعال / غیرفعال
+                                                <input type="checkbox" name="@nameof(Model.IsActive)" value="true" @(Model.IsActive ? "checked" : "") /> فعال / غیرفعال
                                             </label>
                                             <br />
+                                            <img src="@(PathExtension.ProductThumb + Model.ImageName)" />
                                             <div class="col-md-9">
                                                 <input type="file" name="productImage" accept=".png,.jpeg" />
                                             </div>
@@ -95,26 +108,28 @@
                                                         </ul>
                                                         <hr />*@
                                                     <!--#endregion-->
-
+                                                    var isParentCategorySelected = Model.SelectedCategories.Any(x => x == category.Id);
                                                     <ul>
                                                         <li>
                                                             <label>
-                                                                <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.Id" main_category_checkbox="@category.Id" /> @category.Title
+                                                                <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.Id" main_category_checkbox="@category.Id" @(isParentCategorySelected ? "checked" : "") /> @category.Title
                                                             </label>
 
-                                                            <div id="sub_categories_@category.Id" style="display: none">
+                                                            <div id="sub_categories_@category.Id" style="display: @(isParentCategorySelected ? "block" : "none")">
 
                                                                 @foreach (var subCategory in categories.Where(s => s.ParentId == category.Id))
                                                                 {
+                                                                    var isSubCategorySelected = Model.SelectedCategories.Any(x => x == subCategory.Id);
                                                                     <label>
-                                                                        <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.Id" main_category_checkbox="@subCategory.Id" parent-category-id="@category.Id" /> @subCategory.Title
+                                                                        <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.Id" main_category_checkbox="@subCategory.Id" parent-category-id="@category.Id" @(isSubCategorySelected ? "checked" : "") /> @subCategory.Title
                                                                     </label>
-                                                                    <div id="sub_categories_@subCategory.Id" style="display: none">
+                                                                    <div id="sub_categories_@subCategory.Id" style="display: @(isSubCategorySelected ? "block" : "none")">
 
                                                                         @foreach (var secondSubCategory in categories.Where(s => s.ParentId == subCategory.Id))
                                                                         {
+                                                                            var isSecondCategorySelected = Model.SelectedCategories.Any(x => x == secondSubCategory.Id);
                                                                             <label>
-                                                                                <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@secondSubCategory.Id" parent-category-id="@subCategory.Id" /> @secondSubCategory.Title
+                                                                                <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@secondSubCategory.Id" parent-category-id="@subCategory.Id" @(isSecondCategorySelected ? "checked" : "") /> @secondSubCategory.Title
                                                                             </label>
                                                                         }
                                                                     </div>
@@ -145,6 +160,19 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="list_of_product_colors">
+                                                        @if (Model.ProductColors != null && Model.ProductColors.Any())
+                                                        {
+                                                            @foreach (var color in Model.ProductColors)
+                                                            {
+                                                                <tr coler-item-item="@color.ColorName-@color.Price">
+                                                                    <td> @color.ColorName </td>
+                                                                    <td> @color.Price </td>
+                                                                    <td>
+                                                                        <a class="btn btn-danger" onclick="removeProductColer('@color.ColorName-@color.Price')">حذف</a>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
                                                     </tbody>
                                                 </table>
                                             </div>

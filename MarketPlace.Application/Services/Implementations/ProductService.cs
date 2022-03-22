@@ -104,36 +104,16 @@ namespace MarketPlace.Application.Services.Implementations
                 await _productRepository.AddEntity(newProduct);
                 await _productRepository.SaveChanges();
 
-                var productSelectedCategories = new List<ProductSelectedCategory>();
+
                 if (product.SelectedCategories != null && product.SelectedCategories.Any())
                 {
-                    foreach (var categoryId in product.SelectedCategories)
-                    {
-                        productSelectedCategories.Add(new ProductSelectedCategory
-                        {
-                            ProductId = newProduct.Id,
-                            ProductCategoryId = categoryId
-                        });
-                    }
-
-                    await _productSelectedRepository.AddRangeEntities(productSelectedCategories);
+                    await AddProductSelectedCategories(newProduct.Id, product.SelectedCategories);
                     await _productSelectedRepository.SaveChanges();
                 }
 
                 if (product.ProductColors != null && product.ProductColors.Any())
                 {
-                    var productSelectedColor = new List<ProductColors>();
-                    foreach (var color in product.ProductColors)
-                    {
-                        productSelectedColor.Add(new ProductColors
-                        {
-                            ColorName = color.ColorName,
-                            Price = color.Price,
-                            ProductId = newProduct.Id
-                        });
-                    }
-
-                    await _productColorRepository.AddRangeEntities(productSelectedColor);
+                    await AddProductSelectedColors(newProduct.Id, product.ProductColors);
                     await _productColorRepository.SaveChanges();
                 }
 
@@ -178,18 +158,95 @@ namespace MarketPlace.Application.Services.Implementations
             if (product == null) return null;
             return new EditProductDTO
             {
-                 Id = productId,
-                 Price = product.Price,
-                 Description = product.Description,
-                 ShortDescription = product.ShortDescription,
-                 IsActive = product.IsActive,
-                 Title = product.Title,
-                 ProductColors = await _productColorRepository.GetQuery().AsQueryable()
-                     .Where(x=>x.ProductId == productId && !x.IsDelete)
-                     .Select(x=> new CreateProductColorDTO{ Price =x.Price, ColorName = x.ColorName}).ToListAsync(),
-                 SelectedCategories = await _productSelectedRepository.GetQuery().AsQueryable()
-                     .Where(x=>x.ProductId == productId).Select(x=>x.ProductCategoryId).ToListAsync()
+                Id = productId,
+                Price = product.Price,
+                Description = product.Description,
+                ShortDescription = product.ShortDescription,
+                IsActive = product.IsActive,
+                ImageName = product.ImageName,
+                Title = product.Title,
+                ProductColors = await _productColorRepository.GetQuery().AsQueryable()
+                     .Where(x => x.ProductId == productId && !x.IsDelete)
+                     .Select(x => new CreateProductColorDTO { Price = x.Price, ColorName = x.ColorName }).ToListAsync(),
+                SelectedCategories = await _productSelectedRepository.GetQuery().AsQueryable()
+                     .Where(x => x.ProductId == productId).Select(x => x.ProductCategoryId).ToListAsync()
             };
+        }
+
+        public async Task<EditProductResult> EditSellerProduct(EditProductDTO product, long userId,
+            IFormFile productImage)
+        {
+            var mainProduct = await _productRepository.GetQuery().AsQueryable()
+                .Include(x => x.Seller)
+                .SingleOrDefaultAsync(x => x.Id == product.Id);
+            if (mainProduct == null) return EditProductResult.NotFound;
+            if (mainProduct.Seller.UserId != userId) return EditProductResult.NotForUser;
+
+            mainProduct.Title = product.Title;
+            mainProduct.ShortDescription = product.ShortDescription;
+            mainProduct.Description = product.Description;
+            mainProduct.IsActive = product.IsActive;
+            mainProduct.Price = product.Price;
+            await RemoveAllProductSelectedCategories(product.Id);
+
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productImage.FileName);
+            var res = productImage.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                PathExtension.ProductThumbServer, mainProduct.ImageName);
+            if (res)
+            {
+                mainProduct.ImageName = imageName;
+            }
+
+            await RemoveAllProductSelectedCategories(product.Id);
+            await AddProductSelectedCategories(product.Id, product.SelectedCategories);
+            await _productSelectedRepository.SaveChanges();
+            await RemoveAllProductSelectedColors(product.Id);
+            await AddProductSelectedColors(product.Id, product.ProductColors);
+            await _productColorRepository.SaveChanges();
+
+            return EditProductResult.Success;
+        }
+
+        public async Task RemoveAllProductSelectedCategories(long productId)
+        {
+            _productSelectedRepository.DeletePermanentEntities(await _productSelectedRepository.GetQuery().AsQueryable().Where(s => s.ProductId == productId).ToListAsync());
+        }
+
+        public async Task RemoveAllProductSelectedColors(long productId)
+        {
+            _productColorRepository.DeletePermanentEntities(await _productColorRepository.GetQuery().AsQueryable().Where(s => s.ProductId == productId).ToListAsync());
+        }
+
+        public async Task AddProductSelectedColors(long productId, List<CreateProductColorDTO> colors)
+        {
+            var productSelecteadColor = new List<ProductColors>();
+            foreach (var color in colors)
+            {
+                productSelecteadColor.Add(new ProductColors
+                {
+                    ColorName = color.ColorName,
+                    Price = color.Price,
+                    ProductId = productId
+                });
+
+            }
+            await _productColorRepository.AddRangeEntities(productSelecteadColor);
+
+        }
+
+        public async Task AddProductSelectedCategories(long productId, List<long> selectedCategories)
+        {
+            var productSelectedCategories = new List<ProductSelectedCategory>();
+            foreach (var categoryId in selectedCategories)
+            {
+                productSelectedCategories.Add(new ProductSelectedCategory
+                {
+                    ProductId = productId,
+                    ProductCategoryId = categoryId
+                });
+            }
+
+            await _productSelectedRepository.AddRangeEntities(productSelectedCategories);
         }
 
         #endregion

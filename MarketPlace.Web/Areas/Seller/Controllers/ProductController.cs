@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.interfaces;
 using MarketPlace.DataLayer.DTOs.Product;
@@ -30,6 +29,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
             filter.SellerId = seller.Id;
             filter.FilterProductState = FilterProductState.All;
+            filter.TakeEntities = 1000;
             return View(await _productService.FilterProducts(filter));
         }
 
@@ -82,6 +82,28 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         {
             var product = await _productService.GetProductForEdit(productId);
             if (product == null) return NotFound();
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
+            return View(product);
+        }
+        [HttpPost("edit-product/{productId}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProduct(EditProductDTO product, IFormFile productImage)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.EditSellerProduct(product, User.GetUserId(), productImage);
+                switch (res)
+                {
+                    case EditProductResult.NotForUser:
+                        TempData[WarningMessage] = "این محصول برای شما نیست در صورت تکرار دسترسی شما قطع خواهد شد";
+                        break;
+                    case EditProductResult.NotFound:
+                        TempData[ErrorMessage] = "محصولی با این مشخصات یافت نشد";
+                        break;
+                    case EditProductResult.Success:
+                        TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
+                        return RedirectToAction("Index");
+                }
+            }
             ViewBag.Categories = await _productService.GetAllActiveProductCategories();
             return View(product);
         }
