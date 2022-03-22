@@ -97,7 +97,8 @@ namespace MarketPlace.Application.Services.Implementations
                     Price = product.Price,
                     IsActive = product.IsActive,
                     SellerId = sellerId,
-                    ImageName = imageName
+                    ImageName = imageName,
+                    ProductAcceptanceState = ProductAcceptanceState.UnderProcess
                 };
                 await _productRepository.AddEntity(newProduct);
                 await _productRepository.SaveChanges();
