@@ -187,6 +187,7 @@ namespace MarketPlace.Application.Services.Implementations
             mainProduct.Description = product.Description;
             mainProduct.IsActive = product.IsActive;
             mainProduct.Price = product.Price;
+            mainProduct.ProductAcceptanceState = ProductAcceptanceState.UnderProcess;
             await RemoveAllProductSelectedCategories(product.Id);
 
             var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productImage.FileName);
