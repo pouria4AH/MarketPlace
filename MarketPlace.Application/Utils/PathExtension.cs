@@ -32,6 +32,14 @@ namespace MarketPlace.Application.Utils
         public static string ProductThumb = "/Content/Images/Product/Thumb/";
         public static string ProductThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/Product/Thumb/");
 
+        #endregion 
+        #region product gallery
+        public static string ProductGalleryOrigin = "/Content/Images/Product-Gallery/origin/";
+        public static string ProductGalleryOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/Product-Gallery/origin/");
+
+        public static string ProductGalleryThumb = "/Content/Images/Product-Gallery/Thumb/";
+        public static string ProductGalleryThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Content/Images/Product-Gallery/Thumb/");
+
         #endregion
 
         #region site banner

@@ -115,7 +115,8 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         public async Task<IActionResult> GetProductGalleries(long id)
         {
             ViewBag.productId = id;
-            return View(await _productService.GetAllProductGalleryForSeller(id, User.GetUserId()));
+            var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
+            return View(await _productService.GetAllProductGalleryForSeller(id, seller.Id));
         }
 
         [HttpGet("create-product-galleries/{productId}")]
@@ -124,6 +125,33 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             var product = await _productService.GetProductBySellerOwnerId(productId, User.GetUserId());
             if (product == null) return NotFound();
             ViewBag.product = product;
+            return View();
+        }
+
+
+        [HttpPost("create-product-galleries/{productId}")]
+        public async Task<IActionResult> CreateProductGallery(long productId, CreateProductGalleryDTO create)
+        {
+            if (ModelState.IsValid)
+            {
+                var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
+                var res = await _productService.CreateProductGallery(create, productId, seller.Id);
+                switch (res)
+                {
+                    case CreateProductGalleryResult.ImageIsNull:
+                        TempData[WarningMessage] = "لطفا عکس را درست وارد کنید";
+                        break;
+                    case CreateProductGalleryResult.ProductNotFound:
+                        TempData[ErrorMessage] = "محصولی با این مشخصات یافت نشد";
+                        break;
+                    case CreateProductGalleryResult.NotForUserProduct:
+                        TempData[WarningMessage] = "محصول مورد نظر در لیست محصولات شما وجود ندارد";
+                        break;
+                    case CreateProductGalleryResult.Success:
+                        TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
+                        return RedirectToAction("GetProductGalleries", "Product", new { id = productId });
+                }
+            }
             return View();
         }
         #endregion

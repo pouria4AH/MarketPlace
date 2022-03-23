@@ -48,8 +48,10 @@
                                             {
                                                 <tr>
                                                     <td>
-                                                        <img src="@(PathExtension.ProductThumb + product.ImageName)" />
+                                                        <img src="@(PathExtension.ProductGalleryThumb + product.ImageName)" />
                                                     </td>
+                                                    <td>@product.DisplayPriority</td>
+                                                    <td></td>
                                                     <td><a asp-area="Seller" asp-controller="Product" asp-action="EditProduct" asp-route-productId="@product.Id">ویرایش</a></td>
                                                 </tr>
                                             }

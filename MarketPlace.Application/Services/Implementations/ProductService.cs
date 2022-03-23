@@ -271,11 +271,31 @@ namespace MarketPlace.Application.Services.Implementations
                 .SingleOrDefaultAsync(x => x.Seller.UserId == userId && x.Id == productId);
         }
 
-        public async Task<List<ProductGallery>> GetAllProductGalleryForSeller(long id, long userId)
+        public async Task<List<ProductGallery>> GetAllProductGalleryForSeller(long id, long sellerId)
         {
             return await _productGalleryRepository.GetQuery()
                 .Include(x => x.Product)
-                .Where(x => x.ProductId == id && x.Product.Seller.UserId == userId).ToListAsync();
+                .Where(x => x.ProductId == id && x.Product.SellerId == sellerId).ToListAsync();
+        }
+
+        public async Task<CreateProductGalleryResult> CreateProductGallery(CreateProductGalleryDTO create, long productId, long sellerId)
+        {
+            var product = await _productRepository.GetEntityById(productId);
+            if (product == null) return CreateProductGalleryResult.ProductNotFound;
+            if (product.SellerId != sellerId) return CreateProductGalleryResult.NotForUserProduct;
+            if (create.Image == null || !create.Image.IsImage()) return CreateProductGalleryResult.ImageIsNull;
+
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(create.Image.FileName);
+            create.Image.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
+                PathExtension.ProductGalleryThumbServer);
+            await _productGalleryRepository.AddEntity(new ProductGallery
+            {
+                ProductId = productId,
+                ImageName = imageName,
+                DisplayPriority = create.DisplayPriority
+            });
+            await _productGalleryRepository.SaveChanges();
+            return CreateProductGalleryResult.Success;
         }
 
         #endregion

@@ -11,4 +11,12 @@ namespace MarketPlace.DataLayer.DTOs.Product
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public IFormFile Image { get; set; }
     }
+
+    public enum CreateProductGalleryResult
+    {
+        Success,
+        NotForUserProduct,
+        ImageIsNull,
+        ProductNotFound
+    }
 }

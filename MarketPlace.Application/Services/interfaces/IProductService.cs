@@ -34,7 +34,10 @@ namespace MarketPlace.Application.Services.interfaces
 
         Task<List<ProductGallery>> GetAllProductGallery(long id);
         Task<Product> GetProductBySellerOwnerId(long productId, long userId);
-        Task<List<ProductGallery>> GetAllProductGalleryForSeller(long id, long userId);
+        Task<List<ProductGallery>> GetAllProductGalleryForSeller(long id, long sellerId);
+
+        Task<CreateProductGalleryResult> CreateProductGallery(CreateProductGalleryDTO create, long productId,
+            long sellerId);
 
         #endregion
     }
