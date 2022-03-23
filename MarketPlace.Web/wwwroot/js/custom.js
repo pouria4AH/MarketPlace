@@ -96,16 +96,31 @@ $('#add_color_button').on('click',
         if (colorName != '' && colorPrice != '') {
             var currentColorsCount = $('#list_of_product_colors tr');
             var index = currentColorsCount.length;
-            var colorNameNode = `<input type="hidden" value="${colorName}"  name="ProductColors[${index}].ColorName" coler-name-hidden-index="${colorName}-${colorPrice}" >`;
-            var colorPriceNode = `<input type="hidden" value="${colorPrice}"  name="ProductColors[${index}].Price"  coler-price-hidden-index="${colorName}-${colorPrice}" >`;
-            $('#create_product_form').append(colorNameNode);
-            $('#create_product_form').append(colorPriceNode);
+            var isExistsSelectedColor = $(
+                '[coler-name-hidden-index][value="' + colorName + '"]'
+            );
+            if (isExistsSelectedColor.length === 0) {
+                var colorNameNode =
+                    `<input type="hidden" value="${colorName}"  name="ProductColors[${index
+                    }].ColorName" coler-name-hidden-index="${colorName}-${colorPrice}" >`;
+                var colorPriceNode =
+                    `<input type="hidden" value="${colorPrice}"  name="ProductColors[${index
+                    }].Price"  coler-price-hidden-index="${colorName}-${colorPrice}" >`;
+                $('#create_product_form').append(colorNameNode);
+                $('#create_product_form').append(colorPriceNode);
 
-            var colorTableNode = `<tr coler-item-item="${colorName}-${colorPrice}"> <td> ${colorName} </td>  <td> ${colorPrice} </td>  <td> <a class="btn btn-danger" onclick="removeProductColer('${colorName}-${colorPrice}')" >حذف</a> </td>  </tr>`;
-            $('#list_of_product_colors').append(colorTableNode);
+                var colorTableNode =
+                    `<tr coler-item-item="${colorName}-${colorPrice}"> <td> ${colorName} </td>  <td> ${colorPrice
+                    } </td>  <td> <a class="btn btn-danger" onclick="removeProductColer('${colorName}-${colorPrice
+                    }')" >حذف</a> </td>  </tr>`;
+                $('#list_of_product_colors').append(colorTableNode);
 
-            $('#product_color_name_input').val('');
-            $('#product_color_price_input').val('');
+                $('#product_color_name_input').val('');
+                $('#product_color_price_input').val('');
+            } else {
+                ShowMessage('اخطار', 'رنگ وارد شده تکراری می باشد', 'warning');
+                $('#product_color_name_input').val('').focus();
+            }
         } else {
             ShowMessage("اخطار", "اطفا رنگ را درست وارد کنید", "warning")
         }
@@ -115,4 +130,15 @@ function removeProductColer(index2) {
     $('[coler-item-item="' + index2 + '"]').remove();
     $('[coler-name-hidden-index="' + index2 + '"]').remove();
     $('[coler-price-hidden-index="' + index2 + '"]').remove();
+    reOrderProductColorHiddenInputs();
+}
+function reOrderProductColorHiddenInputs() {
+    var hiddenColors = $('[coler-name-hidden-index]');
+    $.each(hiddenColors, function (index, value) {
+        var hiddenColor = $(value);
+        var colorId = $(value).attr('coler-name-hidden-index');
+        var hiddenPrice = $('[coler-price-hidden-index="' + colorId + '"]');
+        $(hiddenColor).attr('name', 'ProductColors[' + index + '].ColorName')
+        $(hiddenPrice).attr('name', 'ProductColors[' + index + '].Price');
+    });
 }

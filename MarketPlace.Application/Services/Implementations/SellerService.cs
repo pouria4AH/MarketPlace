@@ -212,6 +212,13 @@ namespace MarketPlace.Application.Services.Implementations
                     x => x.UserId == userId && x.SellerAcceptanceState == SellerAcceptanceState.Accepted && !x.IsDelete);
         }
 
+        public async Task<bool> HasUserAnyActivePanel(long userId)
+        {
+            return await _sellerRepository.GetQuery().OrderByDescending(x => x.CreateDate)
+                .AnyAsync(
+                    x => x.UserId == userId && x.SellerAcceptanceState == SellerAcceptanceState.Accepted && !x.IsDelete);
+        }
+
         #endregion
 
 

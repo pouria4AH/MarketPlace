@@ -223,12 +223,15 @@ namespace MarketPlace.Application.Services.Implementations
             var productSelecteadColor = new List<ProductColors>();
             foreach (var color in colors)
             {
-                productSelecteadColor.Add(new ProductColors
+                if (productSelecteadColor.All(x => x.ColorName != color.ColorName))
                 {
-                    ColorName = color.ColorName,
-                    Price = color.Price,
-                    ProductId = productId
-                });
+                    productSelecteadColor.Add(new ProductColors
+                    {
+                        ColorName = color.ColorName,
+                        Price = color.Price,
+                        ProductId = productId
+                    });
+                }
 
             }
             await _productColorRepository.AddRangeEntities(productSelecteadColor);
