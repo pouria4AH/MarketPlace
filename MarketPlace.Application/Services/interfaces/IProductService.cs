@@ -30,5 +30,11 @@ namespace MarketPlace.Application.Services.interfaces
 
         #endregion
 
+        #region product gallery
+
+        Task<List<ProductGallery>> GetAllProductGallery(long id);
+        Task<List<ProductGallery>> GetAllProductGalleryForSeller(long id, long userId);
+
+        #endregion
     }
 }

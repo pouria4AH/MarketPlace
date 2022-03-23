@@ -108,5 +108,13 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             return View(product);
         }
         #endregion
+
+        #region product gallery
+
+        public async Task<IActionResult> GetProductGalleries(long id)
+        {
+            return View(await _productService.GetAllProductGalleryForSeller(id, User.GetUserId()));
+        }
+        #endregion
     }
 }

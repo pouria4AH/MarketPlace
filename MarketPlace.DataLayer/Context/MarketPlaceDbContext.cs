@@ -41,6 +41,7 @@ namespace MarketPlace.DataLayer.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+        public DbSet<ProductGallery> ProductGalleries { get; set; }
         #endregion
         #region config
         public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options)

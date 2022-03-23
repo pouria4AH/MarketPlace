@@ -24,13 +24,15 @@ namespace MarketPlace.Application.Services.Implementations
         private readonly IGenericRepository<ProductCategory> _productCategory;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedRepository;
         private readonly IGenericRepository<ProductColors> _productColorRepository;
+        private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategory, IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColors> productColorRepository)
+        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategory, IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColors> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository)
         {
             _productRepository = productRepository;
             _productCategory = productCategory;
             _productSelectedRepository = productSelectedRepository;
             _productColorRepository = productColorRepository;
+            _productGalleryRepository = productGalleryRepository;
         }
 
         #endregion
@@ -251,6 +253,22 @@ namespace MarketPlace.Application.Services.Implementations
             }
 
             await _productSelectedRepository.AddRangeEntities(productSelectedCategories);
+        }
+
+        #endregion
+        #region product gallery
+
+        public async Task<List<ProductGallery>> GetAllProductGallery(long id)
+        {
+            return await _productGalleryRepository.GetQuery().AsQueryable()
+                .Where(x => x.ProductId == id).ToListAsync();
+        }
+
+        public async Task<List<ProductGallery>> GetAllProductGalleryForSeller(long id, long userId)
+        {
+            return await _productGalleryRepository.GetQuery()
+                .Include(x=>x.Product)
+                .Where(x => x.ProductId == id && x.Product.SellerId == userId).ToListAsync();
         }
 
         #endregion
