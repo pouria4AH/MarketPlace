@@ -111,9 +111,20 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
         #region product gallery
 
+        [HttpGet("product-galleries/{id}")]
         public async Task<IActionResult> GetProductGalleries(long id)
         {
+            ViewBag.productId = id;
             return View(await _productService.GetAllProductGalleryForSeller(id, User.GetUserId()));
+        }
+
+        [HttpGet("create-product-galleries/{productId}")]
+        public async Task<IActionResult> CreateProductGallery(long productId)
+        {
+            var product = await _productService.GetProductBySellerOwnerId(productId, User.GetUserId());
+            if (product == null) return NotFound();
+            ViewBag.product = product;
+            return View();
         }
         #endregion
     }

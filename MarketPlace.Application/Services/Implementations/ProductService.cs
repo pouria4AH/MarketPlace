@@ -264,11 +264,18 @@ namespace MarketPlace.Application.Services.Implementations
                 .Where(x => x.ProductId == id).ToListAsync();
         }
 
+        public async Task<Product> GetProductBySellerOwnerId(long productId, long userId)
+        {
+            return await _productRepository.GetQuery()
+                .Include(x => x.Seller)
+                .SingleOrDefaultAsync(x => x.Seller.UserId == userId && x.Id == productId);
+        }
+
         public async Task<List<ProductGallery>> GetAllProductGalleryForSeller(long id, long userId)
         {
             return await _productGalleryRepository.GetQuery()
-                .Include(x=>x.Product)
-                .Where(x => x.ProductId == id && x.Product.SellerId == userId).ToListAsync();
+                .Include(x => x.Product)
+                .Where(x => x.ProductId == id && x.Product.Seller.UserId == userId).ToListAsync();
         }
 
         #endregion
