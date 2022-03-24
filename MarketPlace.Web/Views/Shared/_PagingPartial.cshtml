@@ -4,16 +4,16 @@
         <ul>
             @if (Model.StartPage < Model.PageId)
             {
-                <li class="next"><a onclick="FillPageId(@(Model.PageId - 1))">بعدی</a></li>
+                <li><a class="previous" onclick="FillPageId@(Model.PageId - 1)">قبلی</a></li>
             }
             @for (int i = Model.StartPage; i <= Model.EndPage; i++)
             {
-                <li class="@(Model.PageId == i ? "current" : "")" onclick="FillPageId(@(Model.PageId + 1))">@i</li>
+                <li><a class="@(Model.PageId == i ? "current" : "")" onclick="FillPageId(@i)">@i </a></li>
 
             }
             @if (Model.EndPage > Model.PageId)
             {
-                <li class="next"><a onclick="FillPageId(@(Model.PageId + 1))">بعدی</a></li>
+                <li><a class="next" onclick="FillPageId(@(Model.PageId+ 1))">بعدی</a></li>
             }
         </ul>
     </div>

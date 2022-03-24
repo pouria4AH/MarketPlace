@@ -9,7 +9,7 @@ namespace MarketPlace.Web.Controllers
     {
         #region ctor
 
-        private readonly IProductService _productService ;
+        private readonly IProductService _productService;
 
         public ProductController(IProductService productService)
         {
@@ -22,8 +22,12 @@ namespace MarketPlace.Web.Controllers
         [HttpGet("products")]
         public async Task<IActionResult> FilterProducts(FilterProductDTO filter)
         {
-            var products = await _productService.FilterProducts(filter);
-            return View(products);
+            filter.TakeEntities = 9;
+            filter.FilterProductState = FilterProductState.All;
+            filter = await _productService.FilterProducts(filter);
+            ViewBag.productCategorySelected = await _productService.GetAllActiveProductCategories();
+            if (filter.PageId > filter.GetLastPage()) return NotFound();
+            return View(filter);
         }
         #endregion
 

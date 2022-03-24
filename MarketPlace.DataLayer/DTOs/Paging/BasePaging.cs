@@ -1,4 +1,6 @@
-﻿namespace MarketPlace.DataLayer.DTOs.Paging
+﻿using System;
+
+namespace MarketPlace.DataLayer.DTOs.Paging
 {
     public class BasePaging
     {
@@ -17,6 +19,22 @@
         public int SkipEntities { get; set; }
         public int HowManyShowPageAfterAndBefore { get; set; }
 
+        public int GetLastPage()
+        {
+            return (int)Math.Ceiling(AllEntitiesCount / (double)TakeEntities);
+        }
+        public string GetCurrentPagingState()
+        {
+            var startPage = 1;
+            var endPage = AllEntitiesCount;
+            if (EndPage > 1)
+            {
+                startPage = (PageId - 1) * (TakeEntities + 1);
+                endPage = PageId * TakeEntities > AllEntitiesCount ? AllEntitiesCount : PageId * TakeEntities;
+            }
+
+            return $"نمایش {startPage}-{endPage} از {AllEntitiesCount}";
+        }
         public BasePaging GetCurrentPaging()
         {
             return this;

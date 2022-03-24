@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayer.DTOs.Paging;
 
@@ -13,6 +12,7 @@ namespace MarketPlace.DataLayer.DTOs.Product
         public long? SellerId { get; set; }
         public FilterProductState FilterProductState { get; set; }
         public List<Entities.Products.Product> Products { get; set; }
+        public List<long> ProductCategorySelected { get; set; }
         #endregion
 
         #region methods

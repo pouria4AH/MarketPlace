@@ -66,6 +66,10 @@ function FillPageId(pageId) {
     $('#PageId').val(pageId);
     $('#filter-form').submit();
 }
+//function FillPageId(pageId) {
+//    $('#PageId').val(pageId);
+//    $('#filter-form').submit();
+//}
 function OnSuccessRejectItem(res) {
     if (res.status === 'Success') {
         ShowMessage('اعلان موفقیت', res.message);
@@ -126,19 +130,19 @@ $('#add_color_button').on('click',
         }
     });
 
-function removeProductColer(index2) {
-    $('[coler-item-item="' + index2 + '"]').remove();
-    $('[coler-name-hidden-index="' + index2 + '"]').remove();
-    $('[coler-price-hidden-index="' + index2 + '"]').remove();
-    reOrderProductColorHiddenInputs();
-}
-function reOrderProductColorHiddenInputs() {
-    var hiddenColors = $('[coler-name-hidden-index]');
-    $.each(hiddenColors, function (index, value) {
-        var hiddenColor = $(value);
-        var colorId = $(value).attr('coler-name-hidden-index');
-        var hiddenPrice = $('[coler-price-hidden-index="' + colorId + '"]');
-        $(hiddenColor).attr('name', 'ProductColors[' + index + '].ColorName')
-        $(hiddenPrice).attr('name', 'ProductColors[' + index + '].Price');
-    });
-}
+//function removeProductColer(index2) {
+//    $('[coler-item-item="' + index2 + '"]').remove();
+//    $('[coler-name-hidden-index="' + index2 + '"]').remove();
+//    $('[coler-price-hidden-index="' + index2 + '"]').remove();
+//    reOrderProductColorHiddenInputs();
+//}
+//function reOrderProductColorHiddenInputs() {
+//    var hiddenColors = $('[coler-name-hidden-index]');
+//    $.each(hiddenColors, function (index, value) {
+//        var hiddenColor = $(value);
+//        var colorId = $(value).attr('coler-name-hidden-index');
+//        var hiddenPrice = $('[coler-price-hidden-index="' + colorId + '"]');
+//        $(hiddenColor).attr('name', 'ProductColors[' + index + '].ColorName')
+//        $(hiddenPrice).attr('name', 'ProductColors[' + index + '].Price');
+//    });
+//}
