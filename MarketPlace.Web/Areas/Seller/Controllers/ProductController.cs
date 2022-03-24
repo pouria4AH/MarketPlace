@@ -110,7 +110,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         #endregion
 
         #region product gallery
-
+        #region list
         [HttpGet("product-galleries/{id}")]
         public async Task<IActionResult> GetProductGalleries(long id)
         {
@@ -118,7 +118,8 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
             return View(await _productService.GetAllProductGalleryForSeller(id, seller.Id));
         }
-
+        #endregion
+        #region create
         [HttpGet("create-product-galleries/{productId}")]
         public async Task<IActionResult> CreateProductGallery(long productId)
         {
@@ -130,30 +131,65 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
 
         [HttpPost("create-product-galleries/{productId}")]
-        public async Task<IActionResult> CreateProductGallery(long productId, CreateProductGalleryDTO create)
+        public async Task<IActionResult> CreateProductGallery(long productId, CreateOurEditProductGalleryDTO createOurEdit)
         {
             if (ModelState.IsValid)
             {
                 var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
-                var res = await _productService.CreateProductGallery(create, productId, seller.Id);
+                var res = await _productService.CreateProductGallery(createOurEdit, productId, seller.Id);
                 switch (res)
                 {
-                    case CreateProductGalleryResult.ImageIsNull:
+                    case CreateOurEditProductGalleryResult.ImageIsNull:
                         TempData[WarningMessage] = "لطفا عکس را درست وارد کنید";
                         break;
-                    case CreateProductGalleryResult.ProductNotFound:
+                    case CreateOurEditProductGalleryResult.ProductNotFound:
                         TempData[ErrorMessage] = "محصولی با این مشخصات یافت نشد";
                         break;
-                    case CreateProductGalleryResult.NotForUserProduct:
+                    case CreateOurEditProductGalleryResult.NotForUserProduct:
                         TempData[WarningMessage] = "محصول مورد نظر در لیست محصولات شما وجود ندارد";
                         break;
-                    case CreateProductGalleryResult.Success:
+                    case CreateOurEditProductGalleryResult.Success:
                         TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
                         return RedirectToAction("GetProductGalleries", "Product", new { id = productId });
                 }
             }
             return View();
         }
+        #endregion
+        #region edit
+
+        [HttpGet("product_{productId}/edit-gallery/{galleryId}")]
+        public async Task<IActionResult> EditGallery(long galleryId, long productId)
+        {
+            var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
+            var mainGallery = await _productService.GetProductGalleryFourEdit(galleryId, seller.Id);
+            if (mainGallery == null) return NotFound();
+            return View(mainGallery);
+        }
+        [HttpPost("product_{productId}/edit-gallery/{galleryId}")]
+        public async Task<IActionResult> EditGallery(CreateOurEditProductGalleryDTO gallery, long galleryId, long productId)
+        {
+            if (ModelState.IsValid)
+            {
+                var seller = await _sellerService.GetLastActiveSellerByUser(User.GetUserId());
+                var res = await _productService.EditProductGallery(galleryId, seller.Id, gallery);
+                switch (res)
+                {
+                    case CreateOurEditProductGalleryResult.NotForUserProduct:
+                        TempData[WarningMessage] = "درخواست داده شده برای شما مجاز نمی باشد";
+                        break;
+                    case CreateOurEditProductGalleryResult.ProductNotFound:
+                        TempData[ErrorMessage] = "عکسی با مشخصات زیر یافت نشد";
+                        break;
+                    case CreateOurEditProductGalleryResult.Success:
+                        TempData[SuccessMessage] = "عملیات با موفیت انجام شد";
+                        return RedirectToAction("GetProductGalleries", "Product", new { id = productId });
+                }
+            }
+            return View();
+        }
+
+        #endregion
         #endregion
     }
 }

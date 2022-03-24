@@ -1,7 +1,8 @@
-﻿@using MarketPlace.Application.Utils
+﻿@using SixLabors.ImageSharp.Processing
+@using MarketPlace.Application.Utils
 @model MarketPlace.DataLayer.DTOs.Product.CreateOurEditProductGalleryDTO
 @{
-    ViewData["Title"] = "   ایجاد گالری تصویر برای " + ViewBag.product.Title;
+    ViewData["Title"] = "EditGallery";
 }
 
 <div class="breadcrumbs_area">
@@ -36,9 +37,9 @@
                             <div class="login">
                                 <div class="login_form_container">
                                     <div class="account_login_form">
-                                        <form asp-area="Seller" asp-controller="Product" asp-action="CreateProductGallery" enctype="multipart/form-data" id="create_product_form">
+                                        <form asp-area="Seller" asp-controller="Product" asp-action="EditGallery" method="post" enctype="multipart/form-data" id="create_product_form">
 
-
+                                            <input type="hidden" asp-for="ImageName"/>
                                             <label>اولویت نمایش</label>
                                             <input asp-for="DisplayPriority">
                                             <span class="text-danger" asp-validation-for="DisplayPriority"></span>
@@ -48,9 +49,11 @@
                                                 <input type="file" asp-for="Image" accept=".png,.jpeg" />
                                                 <span class="text-danger" asp-validation-for="Image"></span>
                                             </div>
-
+                                            <div>
+                                                <img src="@(PathExtension.ProductGalleryThumb + Model.ImageName)" width="100px"/>
+                                            </div>
                                             <div class="save_button primary_btn default_button">
-                                                <button type="submit">افزودن</button>
+                                                <button type="submit">ویرایش</button>
                                             </div>
                                         </form>
                                     </div>
@@ -69,3 +72,4 @@
 @section script {
     <partial name="_jqueryValidatord" />
 }
+

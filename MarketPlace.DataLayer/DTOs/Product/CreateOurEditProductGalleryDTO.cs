@@ -3,16 +3,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace MarketPlace.DataLayer.DTOs.Product
 {
-    public class CreateProductGalleryDTO
+    public class CreateOurEditProductGalleryDTO
     {
         [Display(Name = "اولویت محصول")]
         public int DisplayPriority { get; set; }
         [Display(Name = "عکس محصول")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public IFormFile Image { get; set; }
+        [Display(Name = " عکس محصول نام")]
+        public string ImageName { get; set; }
     }
 
-    public enum CreateProductGalleryResult
+    public enum CreateOurEditProductGalleryResult
     {
         Success,
         NotForUserProduct,
