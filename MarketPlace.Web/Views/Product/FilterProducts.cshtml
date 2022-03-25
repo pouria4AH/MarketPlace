@@ -14,8 +14,7 @@
                 <div class="breadcrumb_content">
                     <ul>
                         <li><a href="index.html">خانه</a></li>
-                        <li>دوربین و ویدیو </li>
-                        <li>فروشگاه</li>
+                        <li>محصولات</li>
                     </ul>
                 </div>
             </div>
@@ -38,21 +37,24 @@
                                 @if (ProductCategories != null && ProductCategories.Any())
                                 {
                                     <ul>
+                                        <li class="widget_sub_categories">
+                                            <a asp-area="" asp-controller="Product" asp-action="FilterProducts" asp-route-Category="">همه</a>
+                                        </li>
                                         @foreach (var category in ProductCategories.Where(x => x.ParentId == null))
                                         {
-                                            <li><a href="#" category-dropdown-button="@category.Id">@category.Title</a></li>
+                                            <li><a asp-area="" asp-controller="Product" asp-action="FilterProducts" asp-route-Category="@category.UrlName" category-dropdown-button="@category.Id">@category.Title</a></li>
                                             <li class="widget_sub_categories">
                                                 @if (ProductCategories.Any(x => x.ParentId == category.Id))
                                                 {
                                                     @foreach (var subCategory in ProductCategories.Where(x => x.ParentId == category.Id))
                                                     {
-                                                        <a href="javascript:void(0)" category-dropdown-button="@subCategory.Id" category-dropdown-list="@category.Id">@subCategory.Title</a>
+                                                        <a href="javascript:void(0)" @*asp-area="" asp-controller="Product" asp-action="FilterProducts" asp-route-Category="@subCategory.UrlName"*@ category-dropdown-button="@subCategory.Id" category-dropdown-list="@category.Id">@subCategory.Title</a>
                                                         if (ProductCategories.Any(x => x.ParentId == subCategory.Id))
                                                         {
                                                             <ul class="widget_dropdown_categories">
                                                                 @foreach (var secendCategory in ProductCategories.Where(x => x.ParentId == subCategory.Id))
                                                                 {
-                                                                    <li><a href="#" category-dropdown-list="@subCategory.Id">@secendCategory.Title</a></li>
+                                                                    <li><a asp-area="" asp-controller="Product" asp-action="FilterProducts" asp-route-Category="@secendCategory.UrlName" category-dropdown-list="@subCategory.Id">@secendCategory.Title</a></li>
                                                                 }
                                                             </ul>
                                                         }
@@ -266,6 +268,12 @@
                                     </article>
                                 </div>
                             }
+                        }
+                        else
+                        {
+                            <div class="col-lg-12">
+                                <p class="alert alert-warning">چیزی نیست</p>
+                            </div>
                         }
 
                     </div>

@@ -14,6 +14,7 @@ namespace MarketPlace.DataLayer.DTOs.Product
         #region prop
 
         public string ProductTitle { get; set; }
+        public string Category { get; set; }
         public long? SellerId { get; set; }
         public int FilterMinPrice { get; set; }
         public int FilterMaxPrice { get; set; }

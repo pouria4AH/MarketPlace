@@ -40,7 +40,10 @@ namespace MarketPlace.Application.Services.Implementations
 
         public async Task<FilterProductDTO> FilterProducts(FilterProductDTO filter)
         {
-            var query = _productRepository.GetQuery().AsQueryable();
+            var query = _productRepository.GetQuery()
+                .Include(x => x.ProductSelectedCategories)
+                .ThenInclude(x => x.ProductCategory)
+                .AsQueryable();
 
             #region state
 
@@ -98,6 +101,11 @@ namespace MarketPlace.Application.Services.Implementations
 
             query = query.Where(x => x.Price >= filter.SelectedMinPrice);
             query = query.Where(x => x.Price <= filter.SelectedMaxPrice);
+            if (!string.IsNullOrEmpty(filter.Category))
+            {
+                query = query.Where(x =>
+                    x.ProductSelectedCategories.Any(x => x.ProductCategory.UrlName == filter.Category));
+            }
             #endregion
             #region paging
             var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntities, filter.HowManyShowPageAfterAndBefore);
