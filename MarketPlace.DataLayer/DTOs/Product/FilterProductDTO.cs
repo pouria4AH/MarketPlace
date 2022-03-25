@@ -4,12 +4,17 @@ using MarketPlace.DataLayer.DTOs.Paging;
 
 namespace MarketPlace.DataLayer.DTOs.Product
 {
-    public class FilterProductDTO  : BasePaging
+    public class FilterProductDTO : BasePaging
     {
         #region prop
 
         public string ProductTitle { get; set; }
         public long? SellerId { get; set; }
+        public int FilterMinPrice { get; set; } 
+        public int FilterMaxPrice { get; set; } 
+        public int SelectedMinPrice { get; set; } 
+        public int SelectedMaxPrice { get; set; }
+        public int PriceStep { get; set; } = 1000;
         public FilterProductState FilterProductState { get; set; }
         public List<Entities.Products.Product> Products { get; set; }
         public List<long> ProductCategorySelected { get; set; }
