@@ -32,5 +32,15 @@ namespace MarketPlace.Web.Controllers
         }
         #endregion
 
+        #region product detail
+        [HttpGet("product-detail/{productId}/{title}")]
+        public async Task<IActionResult> ProductDetail(long productId, string title)
+        {
+            var product = await _productService.GetProductDetailBy(productId);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+        #endregion
     }
 }

@@ -21,6 +21,7 @@ namespace MarketPlace.Application.Services.interfaces
         Task RemoveAllProductSelectedColors(long productId);
         Task AddProductSelectedColors(long productId, List<CreateProductColorDTO> colors);
         Task AddProductSelectedCategories(long productId, List<long> selectedCategories);
+        Task<ProductDetailDTO> GetProductDetailBy(long productId);
         #endregion
 
         #region ProductCategories

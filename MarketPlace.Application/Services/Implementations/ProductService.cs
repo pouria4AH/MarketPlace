@@ -286,6 +286,33 @@ namespace MarketPlace.Application.Services.Implementations
             await _productSelectedRepository.AddRangeEntities(productSelectedCategories);
         }
 
+        public async Task<ProductDetailDTO> GetProductDetailBy(long productId)
+        {
+            var product = await _productRepository.GetQuery().AsQueryable()
+                .Include(x => x.Seller)
+                .ThenInclude(x => x.User)
+                .Include(x => x.ProductSelectedCategories)
+                .ThenInclude(x => x.ProductCategory)
+                .Include(x => x.ProductColorses)
+                .Include(x => x.ProductGalleries)
+                .SingleOrDefaultAsync(x => x.Id == productId);
+
+            if (product == null) return null;
+            return new ProductDetailDTO
+            {
+                Price =  product.Price,
+                Title = product.Title,
+                ImageName = product.ImageName,
+                Seller = product.Seller,
+                SellerId = product.SellerId,
+                Description = product.Description,
+                ShortDescription = product.ShortDescription,
+                ProductCategories = product.ProductSelectedCategories.Select(x=>x.ProductCategory).ToList(),
+                ProductGalleries = product.ProductGalleries.ToList(),
+                ProductColors = product.ProductColorses.ToList()
+            };
+        }
+
         #endregion
         #region product gallery
 
