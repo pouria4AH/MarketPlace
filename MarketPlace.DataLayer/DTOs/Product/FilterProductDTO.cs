@@ -6,16 +6,22 @@ namespace MarketPlace.DataLayer.DTOs.Product
 {
     public class FilterProductDTO : BasePaging
     {
+        public FilterProductDTO()
+        {
+            ProductOrderBy = FilterProductOrderBy.CreateDate_Des;
+        }
+
         #region prop
 
         public string ProductTitle { get; set; }
         public long? SellerId { get; set; }
-        public int FilterMinPrice { get; set; } 
-        public int FilterMaxPrice { get; set; } 
-        public int SelectedMinPrice { get; set; } 
+        public int FilterMinPrice { get; set; }
+        public int FilterMaxPrice { get; set; }
+        public int SelectedMinPrice { get; set; }
         public int SelectedMaxPrice { get; set; }
         public int PriceStep { get; set; } = 1000;
         public FilterProductState FilterProductState { get; set; }
+        public FilterProductOrderBy ProductOrderBy { get; set; }
         public List<Entities.Products.Product> Products { get; set; }
         public List<long> ProductCategorySelected { get; set; }
         #endregion
@@ -58,6 +64,20 @@ namespace MarketPlace.DataLayer.DTOs.Product
         NotActive,
         [Display(Name = "همه")]
         All
+    }
+
+    public enum FilterProductOrderBy
+    {
+        [Display(Name = "نزولی تاریخ")]
+        CreateDate_Des,
+        [Display(Name = "صعودی تاریخ")]
+        CreateDate_Aec,
+        [Display(Name = "نزولی قیمت")]
+        Price_Des,
+        [Display(Name = "صعودی قیمت")]
+        Price_Asc
+
+
     }
 }
 

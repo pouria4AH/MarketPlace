@@ -66,6 +66,22 @@ namespace MarketPlace.Application.Services.Implementations
                     break;
             }
 
+            switch (filter.ProductOrderBy)
+            {
+                case FilterProductOrderBy.CreateDate_Des:
+                    query = query.OrderByDescending(x => x.CreateDate);
+                    break;
+                case FilterProductOrderBy.CreateDate_Aec:
+                    query = query.OrderBy(x => x.CreateDate);
+                    break;
+                case FilterProductOrderBy.Price_Des:
+                    query = query.OrderByDescending(x => x.Price);
+                    break;
+                case FilterProductOrderBy.Price_Asc:
+                    query = query.OrderBy(x => x.Price);
+                    break;
+            }
+
             #endregion
 
             #region filter
