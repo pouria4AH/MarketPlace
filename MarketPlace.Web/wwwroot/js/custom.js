@@ -116,7 +116,7 @@ $('#add_color_button').on('click',
                 var colorPriceNode =
                     `<input type="hidden" value="${colorPrice}"  name="ProductColors[${index
                     }].Price"  coler-price-hidden-index="${colorName}-${colorPrice}" >`;
-                var colorCodeNode = `<input type="hidden" value="${colorCode}"  name="ProductColors[${index}].ColorCode" color-price-hidden-input="${colorName}-${colorPrice}" >`;
+                var colorCodeNode = `<input type="hidden" value="${colorCode}"  name="ProductColors[${index}].ColorCode" color-code-hidden-input="${colorName}-${colorPrice}" >`;
                 $('#create_product_form').append(colorNameNode);
                 $('#create_product_form').append(colorPriceNode);
                 $('#create_product_form').append(colorCodeNode);
@@ -142,7 +142,7 @@ function removeProductColer(index2) {
     $('[coler-item-item="' + index2 + '"]').remove();
     $('[coler-name-hidden-index="' + index2 + '"]').remove();
     $('[coler-price-hidden-index="' + index2 + '"]').remove();
-    $('[color-price-hidden-input="' + index2 + '"]').remove();
+    $('[color-code-hidden-input="' + index2 + '"]').remove();
     reOrderProductColorHiddenInputs();
 }
 function reOrderProductColorHiddenInputs() {
@@ -150,9 +150,10 @@ function reOrderProductColorHiddenInputs() {
     $.each(hiddenColors, function (index, value) {
         var hiddenColor = $(value);
         var colorId = $(value).attr('coler-name-hidden-index');
+        var hiddenCode = $('[color-code-hidden-input="' + colorId + '"]');
         var hiddenPrice = $('[coler-price-hidden-index="' + colorId + '"]');
         $(hiddenColor).attr('name', 'ProductColors[' + index + '].ColorName');
         $(hiddenPrice).attr('name', 'ProductColors[' + index + '].Price');
-        $(hiddenPrice).attr('name', 'ProductColors[' + index + '].ColorCode');
+        $(hiddenCode).attr('name', 'ProductColors[' + index + '].ColorCode');
     });
 }
