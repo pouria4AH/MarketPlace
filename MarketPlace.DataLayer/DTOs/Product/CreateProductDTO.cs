@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MarketPlace.DataLayer.Entities.Products;
 
 namespace MarketPlace.DataLayer.DTOs.Product
 {

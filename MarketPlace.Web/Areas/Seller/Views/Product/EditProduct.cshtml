@@ -44,6 +44,7 @@
                                                 {
                                                     <input type="hidden" value="@color.ColorName" name="ProductColors[@index].ColorName" coler-name-hidden-index="@color.ColorName-@color.Price">
                                                     <input type="hidden" value="@color.Price" name="ProductColors[@index].Price" coler-price-hidden-index="@color.ColorName-@color.Price">
+                                                    <input type="hidden" value="@color.ColorCode" name="ProductColors[@index].ColorCode" product_color_code_input="@color.ColorName-@color.Price">
                                                     index += 1;
                                                 }
                                             }
@@ -76,38 +77,6 @@
                                             {
                                                 @foreach (var category in categories.Where(s => s.ParentId == null))
                                                 {
-                                                    <!--#region old code-->
-
-                                                    @*<ul>
-                                                            <li>
-                                                                <label>
-                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.Id" main_category_checkbox="@category.Id" /> @category.Title
-                                                                </label>
-                                                                @if (categories.Any(s => s.ParentId == category.Id))
-                                                                {
-                                                                    <div id="sub_categories_@category.Id" style="display: none">
-
-                                                                        @foreach (var subCategory in categories.Where(s => s.ParentId == category.Id))
-                                                                        {
-                                                                            <label>
-                                                                                <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.Id" main_category_checkbox="@subCategory.Id" parent-category-id="@category.Id" /> @subCategory.Title
-                                                                            </label>
-                                                                            <div id="sub_categories_@subCategory.Id" style="display: none">
-                                                                                @foreach (var secondSubCategory in categories.Where(s => s.ParentId == category.Id))
-                                                                                {
-                                                                                    <label>
-                                                                                        <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@secondSubCategory.Id" main_category_checkbox="@secondSubCategory.Id" parent-category-id="@subCategory.Id" /> @secondSubCategory.Title
-                                                                                    </label>
-                                                                                }
-                                                                            </div>
-                                                                        }
-                                                                    </div>
-                                                                }
-                                                            </li>
-
-                                                        </ul>
-                                                        <hr />*@
-                                                    <!--#endregion-->
                                                     var isParentCategorySelected = Model.SelectedCategories.Any(x => x == category.Id);
                                                     <ul>
                                                         <li>
@@ -144,7 +113,8 @@
                                             <hr />
                                             <label>رنگ محصول</label>
                                             <input type="text" placeholder="رنگ محصول" id="product_color_name_input">
-
+                                            <label>کد رنگ</label>
+                                            <input type="color" placeholder="رنگ محصول" id="product_color_code_input">
                                             <label>قیمت مضاف رنگ محصول</label>
                                             <input type="number" placeholder="قیمت مضاف رنگ محصول" id="product_color_price_input">
 
@@ -156,6 +126,7 @@
                                                         <tr>
                                                             <th>نام رنگ</th>
                                                             <th>قیمت</th>
+                                                            <th>کد رنگ</th>
                                                             <th>دستورات</th>
                                                         </tr>
                                                     </thead>
@@ -164,13 +135,15 @@
                                                         {
                                                             @foreach (var color in Model.ProductColors)
                                                             {
-                                                                <tr coler-item-item="@color.ColorName-@color.Price">
-                                                                    <td> @color.ColorName </td>
-                                                                    <td> @color.Price </td>
-                                                                    <td>
-                                                                        <a class="btn btn-danger" onclick="removeProductColer('@color.ColorName-@color.Price')">حذف</a>
-                                                                    </td>
-                                                                </tr>
+                                                        <tr coler-item-item="@color.ColorName-@color.Price">
+                                                            <td> @color.ColorName </td>
+                                                            <td> @color.Price </td>
+                                                            <td>
+                                                             <div style="border-radius: 50%;width: 40px; height: 40px; background-color:@color.ColorCode"></div></td>
+                                                            <td>
+                                                                <a class="btn btn-danger" onclick="removeProductColer('@color.ColorName-@color.Price')">حذف</a>
+                                                            </td>
+                                                        </tr>
                                                             }
                                                         }
                                                     </tbody>

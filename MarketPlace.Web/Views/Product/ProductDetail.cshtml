@@ -77,24 +77,21 @@
                         <div class="product_desc">
                             <p>@Model.ShortDescription</p>
                         </div>
-                        <div class="product_variant color">
-                            <h3>گزینه های در دسترس</h3>
-                            <label>رنگ</label>
-                            <ul>
-                                <li class="color1">
-                                    <a href="#"></a>
-                                </li>
-                                <li class="color2">
-                                    <a href="#"></a>
-                                </li>
-                                <li class="color3">
-                                    <a href="#"></a>
-                                </li>
-                                <li class="color4">
-                                    <a href="#"></a>
-                                </li>
-                            </ul>
-                        </div>
+                 @if (Model.ProductColors != null && Model.ProductColors.Any())
+                 {
+                     <div class="product_variant color">
+                         <h3>گزینه های در دسترس</h3>
+                         <label>رنگ</label>
+                         @foreach (var color in Model.ProductColors)
+                         {
+                             <ul>
+                                 <li style="background-color: @color.ColorCode">
+                                     <a href="#"></a>
+                                 </li>
+                             </ul>
+                         }
+                     </div>
+                 }
                         <div class="product_variant quantity">
                             <label>تعداد</label>
                             <input min="1" max="100" value="1" type="number">

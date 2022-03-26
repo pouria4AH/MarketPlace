@@ -45,6 +45,9 @@ namespace MarketPlace.Application.Services.Implementations
                 .ThenInclude(x => x.ProductCategory)
                 .AsQueryable();
 
+            var expensivePrice = await query.OrderByDescending(x => x.Price).FirstOrDefaultAsync();
+            filter.FilterMaxPrice = expensivePrice.Price;
+
             #region state
 
             switch (filter.FilterProductState)
@@ -94,8 +97,7 @@ namespace MarketPlace.Application.Services.Implementations
             if (filter.SellerId != null && filter.SellerId != 0)
                 query = query.Where(x => x.SellerId == filter.SellerId.Value);
 
-            var expensivePrice = await query.OrderByDescending(x => x.Price).FirstOrDefaultAsync();
-            filter.FilterMaxPrice = expensivePrice.Price;
+
 
             if (filter.SelectedMaxPrice == 0) filter.SelectedMaxPrice = expensivePrice.Price;
 
@@ -200,7 +202,7 @@ namespace MarketPlace.Application.Services.Implementations
                 Title = product.Title,
                 ProductColors = await _productColorRepository.GetQuery().AsQueryable()
                      .Where(x => x.ProductId == productId && !x.IsDelete)
-                     .Select(x => new CreateProductColorDTO { Price = x.Price, ColorName = x.ColorName }).ToListAsync(),
+                     .Select(x => new CreateProductColorDTO { Price = x.Price, ColorName = x.ColorName, ColorCode = x.ColorCode }).ToListAsync(),
                 SelectedCategories = await _productSelectedRepository.GetQuery().AsQueryable()
                      .Where(x => x.ProductId == productId).Select(x => x.ProductCategoryId).ToListAsync()
             };
@@ -222,15 +224,16 @@ namespace MarketPlace.Application.Services.Implementations
             mainProduct.Price = product.Price;
             mainProduct.ProductAcceptanceState = ProductAcceptanceState.UnderProcess;
             await RemoveAllProductSelectedCategories(product.Id);
-
-            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productImage.FileName);
-            var res = productImage.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
-                PathExtension.ProductThumbServer, mainProduct.ImageName);
-            if (res)
+            if (productImage != null)
             {
-                mainProduct.ImageName = imageName;
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productImage.FileName);
+                var res = productImage.AddImageToServer(imageName, PathExtension.ProductOriginServer, 150, 150,
+                    PathExtension.ProductThumbServer, mainProduct.ImageName);
+                if (res)
+                {
+                    mainProduct.ImageName = imageName;
+                }
             }
-
             await RemoveAllProductSelectedCategories(product.Id);
             await AddProductSelectedCategories(product.Id, product.SelectedCategories);
             await _productSelectedRepository.SaveChanges();
@@ -262,7 +265,8 @@ namespace MarketPlace.Application.Services.Implementations
                     {
                         ColorName = color.ColorName,
                         Price = color.Price,
-                        ProductId = productId
+                        ProductId = productId,
+                        ColorCode = color.ColorCode
                     });
                 }
 
@@ -300,14 +304,14 @@ namespace MarketPlace.Application.Services.Implementations
             if (product == null) return null;
             return new ProductDetailDTO
             {
-                Price =  product.Price,
+                Price = product.Price,
                 Title = product.Title,
                 ImageName = product.ImageName,
                 Seller = product.Seller,
                 SellerId = product.SellerId,
                 Description = product.Description,
                 ShortDescription = product.ShortDescription,
-                ProductCategories = product.ProductSelectedCategories.Select(x=>x.ProductCategory).ToList(),
+                ProductCategories = product.ProductSelectedCategories.Select(x => x.ProductCategory).ToList(),
                 ProductGalleries = product.ProductGalleries.ToList(),
                 ProductColors = product.ProductColorses.ToList()
             };
