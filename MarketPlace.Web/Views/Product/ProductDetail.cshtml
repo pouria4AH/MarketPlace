@@ -3,7 +3,16 @@
 @{
     ViewData["Title"] = Model.Title;
 }
+@section script
+{
+    <script>
 
+        function changeProductPriceBasedOnColor(priceOfColor, colorName) {
+            var basePrice = parseInt($('#ProductBasePrice').val(), 0);
+            $('.current_price').html((basePrice + priceOfColor) + ' تومان' + ' ( ' + colorName + ' )');
+        }
+    </script>
+}
 <div class="breadcrumbs_area">
     <div class="container">
         <div class="row">
@@ -70,28 +79,35 @@
 
                         </div>
                         <div class="price_box">
-                            <span class="current_price">@Model.Price.ToString("#,0 تومان")</span>
-                            <!--<span class="old_price">-->@*@Model.Price.ToString("#,0 تومان")*@<!--</span>-->
-
+                            @{var firstColor = Model.ProductColors.FirstOrDefault();}
+                            @if (Model.ProductColors != null && Model.ProductColors.Any())
+                            {
+                                <span class="current_price">@((Model.Price + firstColor.Price).ToString("#,0 تومان")) (@firstColor.ColorName)</span>
+                            }
+                            else
+                            {
+                                <span class="current_price">@((Model.Price + firstColor.Price).ToString("#,0 تومان")) </span>
+                            }
                         </div>
                         <div class="product_desc">
                             <p>@Model.ShortDescription</p>
                         </div>
-                 @if (Model.ProductColors != null && Model.ProductColors.Any())
-                 {
-                     <div class="product_variant color">
-                         <h3>گزینه های در دسترس</h3>
-                         <label>رنگ</label>
-                         @foreach (var color in Model.ProductColors)
-                         {
-                             <ul>
-                                 <li style="background-color: @color.ColorCode">
-                                     <a href="#"></a>
-                                 </li>
-                             </ul>
-                         }
-                     </div>
-                 }
+                        <input type="hidden" name="product_price" value="@Model.Price" id="ProductBasePrice" />
+                        @if (Model.ProductColors != null && Model.ProductColors.Any())
+                        {
+                            <div class="product_variant color">
+                                <h3>گزینه های در دسترس</h3>
+                                <label>رنگ</label>
+                                @foreach (var color in Model.ProductColors)
+                                {
+                                    <ul>
+                                        <li style="background-color: @color.ColorCode">
+                                            <a onclick="changeProductPriceBasedOnColor(@color.Price,'@color.ColorName')"></a>
+                                        </li>
+                                    </ul>
+                                }
+                            </div>
+                        }
                         <div class="product_variant quantity">
                             <label>تعداد</label>
                             <input min="1" max="100" value="1" type="number">

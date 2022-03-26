@@ -25,7 +25,6 @@ namespace MarketPlace.Web.Controllers
         {
             filter.TakeEntities = 9;
             filter.FilterProductState = FilterProductState.Accept;
-            filter.FilterProductState = FilterProductState.All;
             filter = await _productService.FilterProducts(filter);
             ViewBag.productCategorySelected = await _productService.GetAllActiveProductCategories();
             if (filter.PageId > filter.GetLastPage() && filter.GetLastPage() != 0) return NotFound();

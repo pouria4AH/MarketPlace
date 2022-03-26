@@ -156,4 +156,10 @@ function reOrderProductColorHiddenInputs() {
         $(hiddenPrice).attr('name', 'ProductColors[' + index + '].Price');
         $(hiddenCode).attr('name', 'ProductColors[' + index + '].ColorCode');
     });
+
+
+    function changeProductPriceBasedOnColor(priceOfColor, colorName) {
+        var basePrice = parseInt($('#ProductBasePrice').val(), 0);
+        $('.current_price').html((basePrice + priceOfColor) + ' تومان' + ' ( ' + colorName + ' )');
+    }
 }
