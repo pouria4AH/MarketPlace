@@ -25,14 +25,16 @@ namespace MarketPlace.Application.Services.Implementations
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedRepository;
         private readonly IGenericRepository<ProductColors> _productColorRepository;
         private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
+        private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategory, IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColors> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository)
+        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategory, IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColors> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<ProductFeature> productFeatureRepository)
         {
             _productRepository = productRepository;
             _productCategory = productCategory;
             _productSelectedRepository = productSelectedRepository;
             _productColorRepository = productColorRepository;
             _productGalleryRepository = productGalleryRepository;
+            _productFeatureRepository = productFeatureRepository;
         }
 
         #endregion
@@ -414,6 +416,36 @@ namespace MarketPlace.Application.Services.Implementations
         {
             return await _productCategory.GetQuery().AsQueryable()
                 .Where(x => !x.IsDelete && x.IsActive).ToListAsync();
+        }
+
+        #endregion
+        #region product feature
+
+        public async Task CreateProductFeature(List<CreateProductFeatureDTO> features)
+        {
+            var newFeatures = new List<ProductFeature>();
+            if (features != null && features.Any())
+            {
+                foreach (var feature in features)
+                {
+                    newFeatures.Add(new ProductFeature
+                    {
+                        ProductId = feature.ProductId,
+                        FeatureTitle = feature.FeatureTitle,
+                        FeatureValue = feature.FeatureValue
+                    });
+                    await _productFeatureRepository.AddRangeEntities(newFeatures);
+                    await _productFeatureRepository.SaveChanges();
+                }
+            }
+        }
+
+        public async Task RemoveAllProductFeature(long productId)
+        {
+            var productFeatures = await _productFeatureRepository.GetQuery().Where(x => x.ProductId == productId)
+                .ToListAsync();
+            _productFeatureRepository.DeletePermanentEntities(productFeatures);
+            await _productFeatureRepository.SaveChanges();
         }
 
         #endregion

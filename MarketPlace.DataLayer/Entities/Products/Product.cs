@@ -40,6 +40,7 @@ namespace MarketPlace.DataLayer.Entities.Products
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public ICollection<ProductColors> ProductColorses { get; set; }
         public ICollection<ProductGallery> ProductGalleries { get; set; }
+        public ICollection<ProductFeature> ProductFeatures { get; set; }
         public Seller Seller { get; set; }
 
         #endregion
