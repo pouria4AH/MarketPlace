@@ -25,6 +25,7 @@ namespace MarketPlace.DataLayer.DTOs.Product
         public string Description { get; set; }
 
         public List<CreateProductColorDTO> ProductColors { get; set; }
+        public List<CreateProductFeatureDTO> ProductFeatures { get; set; }
         public List<long> SelectedCategories { get; set; }
     }
 

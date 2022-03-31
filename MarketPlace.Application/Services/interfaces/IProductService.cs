@@ -40,14 +40,14 @@ namespace MarketPlace.Application.Services.interfaces
         Task<CreateOurEditProductGalleryResult> CreateProductGallery(CreateOurEditProductGalleryDTO createOurEdit, long productId,
             long sellerId);
 
-        Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId, long sellerId );
+        Task<CreateOurEditProductGalleryDTO> GetProductGalleryFourEdit(long galleryId, long sellerId);
         Task<CreateOurEditProductGalleryResult> EditProductGallery(long galleryId, long SellerId, CreateOurEditProductGalleryDTO gallery);
 
         #endregion
 
         #region product feature
 
-        Task CreateProductFeature(List<CreateProductFeatureDTO> features);
+        Task CreateProductFeature(long productId, List<CreateProductFeatureDTO> features);
         Task RemoveAllProductFeature(long productId);
 
         #endregion

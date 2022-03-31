@@ -13,7 +13,7 @@ namespace MarketPlace.DataLayer.DTOs.Product
         [Display(Name = "عنوان ویژگی")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string FeatureTitle { get; set; }
+        public string Feature { get; set; }
         [Display(Name = "مقدار ویژگی")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

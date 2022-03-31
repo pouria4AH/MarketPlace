@@ -48,6 +48,16 @@
                                                     index += 1;
                                                 }
                                             }
+                                            @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                                            {
+                                                var index = 0;
+                                                foreach (var feature in Model.ProductFeatures)
+                                                {
+                                                    <input type="hidden" value="@feature.Feature" name="ProductFeatures[@index].Feature" coler-name-hidden-index="@feature.Feature-@feature.FeatureValue">
+                                                    <input type="hidden" value="@feature.FeatureValue" name="ProductFeatures[@index].FeatureValue" coler-price-hidden-index="@feature.Feature-@feature.FeatureValue">
+                                                    index += 1;
+                                                }
+                                            }
                                             <br>
                                             <label> نام محصول</label>
                                             <input asp-for="Title">
@@ -135,22 +145,55 @@
                                                         {
                                                             @foreach (var color in Model.ProductColors)
                                                             {
-                                                        <tr coler-item-item="@color.ColorName-@color.Price">
-                                                            <td> @color.ColorName </td>
-                                                            <td> @color.Price </td>
-                                                            <td>
-                                                             <div style="border-radius: 50%;width: 40px; height: 40px; background-color:@color.ColorCode"></div></td>
-                                                            <td>
-                                                                <a class="btn btn-danger" onclick="removeProductColer('@color.ColorName-@color.Price')">حذف</a>
-                                                            </td>
-                                                        </tr>
+                                                                <tr coler-item-item="@color.ColorName-@color.Price">
+                                                                    <td> @color.ColorName </td>
+                                                                    <td> @color.Price </td>
+                                                                    <td>
+                                                                        <div style="border-radius: 50%;width: 40px; height: 40px; background-color:@color.ColorCode"></div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a class="btn btn-danger" onclick="removeProductColer('@color.ColorName-@color.Price')">حذف</a>
+                                                                    </td>
+                                                                </tr>
                                                             }
                                                         }
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="save_button primary_btn default_button">
-                                                <button type="submit">ایجاد</button>
+                                            <hr />
+                                            <label>ویژگی محصول</label>
+                                            <input type="text" placeholder="ویژگی محصول" id="product_feature_input">
+                                            <label>مقدار ویژگی محصول</label>
+                                            <input type="text" placeholder="مقدار ویژگی محصول" id="product_feature_value_input">
+                                            <button class="btn btn-success" id="add_feature_button">افزودن ویژگی</button>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>نام ویژگی</th>
+                                                            <th>مقدار ویژگی</th>
+                                                            <th>دستورات</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="list_of_product_features">
+                                                    @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                                                    {
+                                                        @foreach (var feature in Model.ProductFeatures)
+                                                        {
+                                                            <tr coler-item-item="@feature.Feature-@feature.FeatureValue">
+                                                                <td> @feature.Feature </td>
+                                                                <td> @feature.FeatureValue </td>
+                                                                <td>
+                                                                    <a class="btn btn-danger" onclick="removeProductColer('@feature.Feature-@feature.FeatureValue')">حذف</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    </tbody>
+                                                </table>
+                                                <div class="save_button primary_btn default_button">
+                                                    <button type="submit">ویرایش</button>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>

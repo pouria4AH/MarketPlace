@@ -206,7 +206,15 @@ namespace MarketPlace.Application.Services.Implementations
                      .Where(x => x.ProductId == productId && !x.IsDelete)
                      .Select(x => new CreateProductColorDTO { Price = x.Price, ColorName = x.ColorName, ColorCode = x.ColorCode }).ToListAsync(),
                 SelectedCategories = await _productSelectedRepository.GetQuery().AsQueryable()
-                     .Where(x => x.ProductId == productId).Select(x => x.ProductCategoryId).ToListAsync()
+                     .Where(x => x.ProductId == productId).Select(x => x.ProductCategoryId).ToListAsync(),
+                ProductFeatures = await _productFeatureRepository.GetQuery().AsQueryable()
+                    .Where(x => !x.IsDelete && x.ProductId == productId)
+                    .Select(x => new CreateProductFeatureDTO
+                    {
+                        FeatureValue = x.FeatureValue,
+                        Feature = x.FeatureTitle
+                    }).ToListAsync()
+
             };
         }
 
@@ -241,6 +249,7 @@ namespace MarketPlace.Application.Services.Implementations
             await _productSelectedRepository.SaveChanges();
             await RemoveAllProductSelectedColors(product.Id);
             await AddProductSelectedColors(product.Id, product.ProductColors);
+            await CreateProductFeature(product.Id, product.ProductFeatures);
             await _productColorRepository.SaveChanges();
 
             return EditProductResult.Success;
@@ -421,7 +430,7 @@ namespace MarketPlace.Application.Services.Implementations
         #endregion
         #region product feature
 
-        public async Task CreateProductFeature(List<CreateProductFeatureDTO> features)
+        public async Task CreateProductFeature(long productId, List<CreateProductFeatureDTO> features)
         {
             var newFeatures = new List<ProductFeature>();
             if (features != null && features.Any())
@@ -430,8 +439,8 @@ namespace MarketPlace.Application.Services.Implementations
                 {
                     newFeatures.Add(new ProductFeature
                     {
-                        ProductId = feature.ProductId,
-                        FeatureTitle = feature.FeatureTitle,
+                        ProductId = productId,
+                        FeatureTitle = feature.Feature,
                         FeatureValue = feature.FeatureValue
                     });
                     await _productFeatureRepository.AddRangeEntities(newFeatures);
