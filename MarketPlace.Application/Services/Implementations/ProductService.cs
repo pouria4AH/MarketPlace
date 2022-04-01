@@ -249,6 +249,7 @@ namespace MarketPlace.Application.Services.Implementations
             await _productSelectedRepository.SaveChanges();
             await RemoveAllProductSelectedColors(product.Id);
             await AddProductSelectedColors(product.Id, product.ProductColors);
+            await RemoveAllProductFeature(product.Id);
             await CreateProductFeature(product.Id, product.ProductFeatures);
             await _productColorRepository.SaveChanges();
 
@@ -310,6 +311,7 @@ namespace MarketPlace.Application.Services.Implementations
                 .ThenInclude(x => x.ProductCategory)
                 .Include(x => x.ProductColorses)
                 .Include(x => x.ProductGalleries)
+                .Include(x => x.ProductFeatures)
                 .SingleOrDefaultAsync(x => x.Id == productId);
 
             if (product == null) return null;
@@ -324,7 +326,8 @@ namespace MarketPlace.Application.Services.Implementations
                 ShortDescription = product.ShortDescription,
                 ProductCategories = product.ProductSelectedCategories.Select(x => x.ProductCategory).ToList(),
                 ProductGalleries = product.ProductGalleries.ToList(),
-                ProductColors = product.ProductColorses.ToList()
+                ProductColors = product.ProductColorses.ToList(),
+                ProductFeatures = product.ProductFeatures.ToList()
             };
         }
 
@@ -443,9 +446,9 @@ namespace MarketPlace.Application.Services.Implementations
                         FeatureTitle = feature.Feature,
                         FeatureValue = feature.FeatureValue
                     });
-                    await _productFeatureRepository.AddRangeEntities(newFeatures);
-                    await _productFeatureRepository.SaveChanges();
                 }
+                await _productFeatureRepository.AddRangeEntities(newFeatures);
+                await _productFeatureRepository.SaveChanges();
             }
         }
 

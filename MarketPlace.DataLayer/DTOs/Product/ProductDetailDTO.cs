@@ -31,5 +31,6 @@ namespace MarketPlace.DataLayer.DTOs.Product
         public List<ProductCategory> ProductCategories { get; set; }
         public List<ProductColors> ProductColors { get; set; }
         public List<ProductGallery> ProductGalleries { get; set; }
+        public List<ProductFeature> ProductFeatures { get; set; }
     }
 }
